@@ -234,7 +234,7 @@ tinp.value = S.title || ‘’;
 tinp.addEventListener(‘input’, function() { S.title = tinp.value; save(); });
 
 app.appendChild(dv(‘hdr’, null, [
-dv(‘hdr-row’, null, [tinp, bt(‘exp-btn’, null, ‘📤 ייצוא’, doExport)])
+dv(‘hdr-row’, null, [tinp, bt(‘exp-btn’, null, ‘💾 HTML’, saveHTML), bt(‘exp-btn’, null, ‘📤 xlsx’, doExport)])
 ]));
 
 var tDefs = [
@@ -489,6 +489,21 @@ gexp > 0 ? sp(null,‘display:block;font-size:11px;font-family:Courier New,monos
 }
 pg.appendChild(gc);
 }
+}
+
+// ── SAVE HTML ──
+function saveHTML() {
+var html = document.documentElement.outerHTML;
+// Embed current state into the saved file
+var marker = “var KEY = ‘cf5’;”;
+var inject = “var KEY = ‘cf5’;\n// embedded state\ntry { localStorage.setItem(‘cf5’, “ + JSON.stringify(JSON.stringify(S)) + “); } catch(e) {}”;
+html = html.replace(marker, inject);
+var b = new Blob([html], { type: ‘text/html;charset=utf-8’ });
+var a = document.createElement(‘a’);
+a.href = URL.createObjectURL(b);
+a.download = ‘תזרים_’ + (S.title || ‘’).replace(/\s/g, ‘_’) + ‘.html’;
+document.body.appendChild(a); a.click();
+setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
 }
 
 // ── EXPORT ──

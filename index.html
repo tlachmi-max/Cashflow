@@ -68,7 +68,6 @@ td { padding: 2px 3px; vertical-align: middle; }
 .mdl-steps { color: #94a3b8; font-size: 13px; line-height: 2; margin-bottom: 18px; text-align: right; }
 .mclose { width: 100%; padding: 13px; background: #293548; border: 1px solid #334155; border-radius: 9px; color: #e2e8f0; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; display: block; }
 </style>
-
 </head>
 <body>
 <div id="app"></div>
@@ -79,34 +78,95 @@ var S;
 
 function defTitle() {
   var d = new Date();
-  var M = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
+  var M = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
   return M[d.getMonth()] + ' ' + d.getFullYear();
 }
-function defState() { return { title: defTitle(), funds: [], goals: [], expenses: [] }; }
 
-try { var _r = localStorage.getItem(KEY); S = _r ? JSON.parse(_r) : defState(); } catch(e) { S = defState(); }
+function defState() { 
+  return { title: defTitle(), funds: [], goals: [], expenses: [] }; 
+}
+
+try { 
+  var _r = localStorage.getItem(KEY); 
+  S = _r ? JSON.parse(_r) : defState(); 
+} catch(e) { 
+  S = defState(); 
+}
 if (!S || !S.funds) S = defState();
 
 var TIMER = null;
 function save() {
   clearTimeout(TIMER);
-  TIMER = setTimeout(function() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }, 400);
+  TIMER = setTimeout(function() { 
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} 
+  }, 400);
 }
-function uid() { return '_' + Math.random().toString(36).slice(2,9); }
-function fmtN(n) { var v = parseFloat(n); if (isNaN(v)) return '0'; return v.toLocaleString('he-IL'); }
-function getFund(id) { for (var i = 0; i < S.funds.length; i++) if (S.funds[i].id === id) return S.funds[i]; return null; }
+
+function uid() { return '_' + Math.random().toString(36).slice(2, 9); }
+function fmtN(n) { 
+  var v = parseFloat(n); 
+  if (isNaN(v)) return '0'; 
+  return v.toLocaleString('he-IL'); 
+}
+
+function getFund(id) { 
+  for (var i = 0; i < S.funds.length; i++) 
+    if (S.funds[i].id === id) return S.funds[i]; 
+  return null; 
+}
+
 function getGoalAmt(g) {
-  if (g.type === 'shanati') { var f = getFund(g.fundId); return f ? (parseFloat(f.amount) || 0) : 0; }
+  if (g.type === 'shanati') { 
+    var f = getFund(g.fundId); 
+    return f ? (parseFloat(f.amount) || 0) : 0; 
+  }
   return parseFloat(g.amount) || 0;
 }
-function shnatiFunds() { var o = []; for (var i = 0; i < S.funds.length; i++) if (S.funds[i].type === 'shanati') o.push(S.funds[i]); return o; }
-function goalCategories() { var o = [], seen = {}; for (var i = 0; i < S.goals.length; i++) { var c = S.goals[i].category; if (c && !seen[c]) { seen[c] = true; o.push(c); } } return o; }
-function expBycat() { var m = {}; for (var i = 0; i < S.expenses.length; i++) { var e = S.expenses[i]; var c = e.category || ''; if (!m[c]) m[c] = 0; m[c] += parseFloat(e.amount) || 0; } return m; }
-function klaliBudgetBycat() { var m = {}; for (var i = 0; i < S.goals.length; i++) { var g = S.goals[i]; if (g.type === 'klali') { var c = g.category || ''; if (!m[c]) m[c] = 0; m[c] += getGoalAmt(g); } } return m; }
+
+function shnatiFunds() { 
+  var o = []; 
+  for (var i = 0; i < S.funds.length; i++) 
+    if (S.funds[i].type === 'shanati') o.push(S.funds[i]); 
+  return o; 
+}
+
+function goalCategories() { 
+  var o = [], seen = {}; 
+  for (var i = 0; i < S.goals.length; i++) { 
+    var c = S.goals[i].category; 
+    if (c && !seen[c]) { seen[c] = true; o.push(c); } 
+  } 
+  return o; 
+}
+
+function expBycat() { 
+  var m = {}; 
+  for (var i = 0; i < S.expenses.length; i++) { 
+    var e = S.expenses[i]; 
+    var c = e.category || ''; 
+    if (!m[c]) m[c] = 0; 
+    m[c] += parseFloat(e.amount) || 0; 
+  } 
+  return m; 
+}
+
+function klaliBudgetBycat() { 
+  var m = {}; 
+  for (var i = 0; i < S.goals.length; i++) { 
+    var g = S.goals[i]; 
+    if (g.type === 'klali') { 
+      var c = g.category || ''; 
+      if (!m[c]) m[c] = 0; 
+      m[c] += getGoalAmt(g); 
+    } 
+  } 
+  return m; 
+}
 
 /* DOM helpers */
 function ce(t) { return document.createElement(t); }
 function tx(s) { return document.createTextNode(s == null ? '' : String(s)); }
+
 function ap(p, kids) {
   if (!kids) return p;
   for (var i = 0; i < kids.length; i++) {
@@ -116,6 +176,7 @@ function ap(p, kids) {
   }
   return p;
 }
+
 function mk(tag, cls, sty, kids, evs) {
   var e = ce(tag);
   if (cls) e.className = cls;
@@ -124,12 +185,15 @@ function mk(tag, cls, sty, kids, evs) {
   if (evs) { for (var n in evs) e.addEventListener(n, evs[n]); }
   return e;
 }
+
 function dv(cls, sty, kids, ev) {
   var d = mk('div', cls, sty, kids);
   if (ev) d.addEventListener('click', ev);
   return d;
 }
+
 function sp(cls, sty, kids) { return mk('span', cls, sty, kids); }
+
 function bt(cls, sty, txt, fn) {
   var b = ce('button');
   if (cls) b.className = cls;
@@ -138,6 +202,7 @@ function bt(cls, sty, txt, fn) {
   b.addEventListener('click', fn);
   return b;
 }
+
 function inpTxt(val, fn, sty, ph) {
   var i = ce('input'); i.type = 'text'; i.className = 'ti';
   if (sty) i.style.cssText = sty;
@@ -146,6 +211,7 @@ function inpTxt(val, fn, sty, ph) {
   i.addEventListener('input', function() { fn(i.value); });
   return i;
 }
+
 function inpNum(val, fn, cls) {
   var i = ce('input'); i.type = 'tel'; i.className = cls || 'ni2';
   i.setAttribute('inputmode', 'decimal');
@@ -157,6 +223,7 @@ function inpNum(val, fn, cls) {
   });
   return i;
 }
+
 function inpSel(opts, val, fn) {
   var s = ce('select'); s.className = 'si2';
   for (var i = 0; i < opts.length; i++) {
@@ -167,6 +234,7 @@ function inpSel(opts, val, fn) {
   s.addEventListener('change', function() { fn(s.value); });
   return s;
 }
+
 function dbtn(fn) { return bt('delbtn', null, '✕', fn); }
 function tth(txt, w) { var t = ce('th'); t.appendChild(tx(txt)); if (w) t.style.minWidth = w; return t; }
 function ttd(w) { var t = ce('td'); if (w) t.style.minWidth = w; return t; }

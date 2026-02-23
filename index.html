@@ -3,55 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>תזרים משפחתי</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
+/* תיקון משתני ה-CSS שיהיו עם מינוס תקני */
 :root {
-  --bg:#0f172a; --sf:#1e293b; --sl:#293548; --bdr:#334155;
-  --ac:#38bdf8; --gn:#4ade80; --rd:#f87171; --or:#fb923c; --pu:#c084fc;
-  --tx:#e2e8f0; --dm:#94a3b8; --mt:#64748b; --wh:#f8fafc;
+  --bg: #0f172a; --sf: #1e293b; --sl: #293548; --bdr: #334155;
+  --ac: #38bdf8; --gn: #4ade80; --rd: #f87171; --or: #fb923c; --pu: #c084fc;
+  --tx: #e2e8f0; --dm: #94a3b8; --mt: #64748b; --wh: #f8fafc;
+  --sb: env(safe-area-inset-bottom, 0px); --st: env(safe-area-inset-top, 0px);
 }
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-body { background:var(--bg); color:var(--tx); font-family:-apple-system, system-ui, sans-serif; direction:rtl; min-height:100vh; }
-.hdr { background:var(--sf); border-bottom:1px solid var(--bdr); padding:10px 14px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:100; }
-.tabs { display:flex; background:var(--bg); border-bottom:1px solid var(--bdr); position:sticky; top:56px; z-index:90; }
-.tab { flex:1; padding:12px; border:none; background:transparent; color:var(--mt); font-size:12px; cursor:pointer; text-align:center; border-bottom:2px solid transparent; }
-.tab.on { color:var(--ac); border-bottom-color:var(--ac); font-weight:700; }
-.pg { padding:12px; padding-bottom:100px; }
-.card { background:var(--sf); border:1px solid var(--bdr); border-radius:12px; padding:15px; margin-bottom:10px; }
-.ni2, .si2 { background:var(--bg); border:1px solid var(--bdr); color:var(--tx); padding:8px; border-radius:8px; width:100%; font-size:16px; margin-top:5px; }
-label { font-size:11px; color:var(--dm); }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--tx); font-family: -apple-system, system-ui, sans-serif; direction: rtl; min-height: 100vh; }
+
+.hdr { background: var(--sf); border-bottom: 1px solid var(--bdr); padding: 10px 14px; padding-top: max(var(--st), 10px); position: sticky; top: 0; z-index: 100; }
+.hdr-row { display: flex; align-items: center; gap: 10px; }
+.title-inp { background: transparent; border: none; border-bottom: 1px solid transparent; color: var(--wh); font-size: 17px; font-weight: 700; flex: 1; text-align: center; padding: 4px 8px; }
+.exp-btn { background: var(--sl); border: 1px solid var(--bdr); border-radius: 8px; color: var(--tx); padding: 7px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.tabs { display: flex; background: var(--bg); border-bottom: 1px solid var(--bdr); overflow-x: auto; }
+.tab { flex: 1; min-width: 80px; padding: 12px 4px; border: none; background: transparent; color: var(--mt); font-size: 11px; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab.on { color: var(--ac); border-bottom-color: var(--ac); font-weight: 700; }
+
+.pg { padding: 12px; padding-bottom: calc(80px + var(--sb)); }
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--bdr); margin-bottom: 10px; background: var(--sf); }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--sl); color: var(--dm); font-size: 11px; padding: 8px; text-align: right; border-bottom: 1px solid var(--bdr); }
+td { padding: 4px; border-bottom: 1px solid var(--bdr); }
+
+.ti { background: transparent; border: none; color: var(--tx); font-size: 13px; padding: 8px; width: 100%; }
+.ni2 { background: transparent; border: none; color: var(--ac); font-size: 13px; font-weight: 600; width: 100%; text-align: left; direction: ltr; font-family: monospace; }
+.si2 { background: transparent; border: none; color: var(--tx); font-size: 12px; width: 100%; padding: 4px; }
+
+.addbtn { width: 100%; padding: 12px; background: var(--sf); border: 1px dashed var(--bdr); border-radius: 10px; color: var(--dm); font-size: 13px; margin-top: 10px; cursor: pointer; }
+.sc { background: var(--sf); border: 1px solid var(--bdr); border-radius: 12px; padding: 16px; margin-bottom: 10px; }
+.sc-lbl { color: var(--dm); font-size: 12px; }
+.sc-val { font-size: 24px; font-weight: 800; font-family: monospace; text-align: left; }
+.delbtn { background: none; border: none; color: var(--mt); font-size: 16px; cursor: pointer; padding: 5px; }
 </style>
 </head>
 <body>
 <div id="app"></div>
 
 <script>
-// שימוש במרכאות תקניות בלבד
-var KEY = 'cf5_final';
-var TAB = 'summary';
+// שימוש במרכאות תקינות בלבד
+var KEY = 'cf5';
+var TAB = 'funds';
 var S;
 
 function defState() {
-    return { 
-        title: 'תזרים חדש', 
-        funds: [], 
-        goals: [], 
-        expenses: [],
-        profile: { gender: 'male', age: 30 } 
-    };
+    return { title: 'תזרים ' + new Date().getFullYear(), funds: [], goals: [], expenses: [] };
 }
 
-// טעינת נתונים
 try {
     var r = localStorage.getItem(KEY);
     S = r ? JSON.parse(r) : defState();
-    if(!S.profile) S.profile = { gender: 'male', age: 30 };
 } catch(e) { S = defState(); }
 
 function save() {
     localStorage.setItem(KEY, JSON.stringify(S));
 }
+
+function uid() { return '_' + Math.random().toString(36).slice(2, 9); }
+function fmtN(n) { return (parseFloat(n) || 0).toLocaleString('he-IL'); }
 
 function render() {
     var app = document.getElementById('app');
@@ -60,62 +75,119 @@ function render() {
     // Header
     var hdr = document.createElement('div');
     hdr.className = 'hdr';
-    hdr.innerHTML = `<div style="color:var(--wh); font-weight:bold; flex:1">התזרים שלי</div>
-                     <button onclick="location.reload()" style="background:none; border:none; color:var(--ac)">🔄</button>`;
+    hdr.innerHTML = `
+        <div class="hdr-row">
+            <input type="text" class="title-inp" value="${S.title}" oninput="S.title=this.value;save()">
+            <button class="exp-btn" onclick="doExport()">📤 xlsx</button>
+        </div>`;
     app.appendChild(hdr);
 
     // Tabs
-    var tabBar = document.createElement('div');
-    tabBar.className = 'tabs';
-    [['summary','📊 סיכום'],['settings','⚙️ הגדרות']].forEach(t => {
+    var tBar = document.createElement('div');
+    tBar.className = 'tabs';
+    [['funds','🏦 קרנות'],['goals','🎯 יעדים'],['expenses','💸 הוצאות'],['summary','📊 סיכום']].forEach(t => {
         var b = document.createElement('button');
         b.className = 'tab' + (TAB === t[0] ? ' on' : '');
         b.innerText = t[1];
         b.onclick = () => { TAB = t[0]; render(); };
-        tabBar.appendChild(b);
+        tBar.appendChild(b);
     });
-    app.appendChild(tabBar);
+    app.appendChild(tBar);
 
     var pg = document.createElement('div');
     pg.className = 'pg';
 
-    if (TAB === 'summary') {
-        pg.innerHTML = `
-            <div class="card">
-                <div style="color:var(--dm); font-size:12px">שלום, ${S.profile.gender === 'male' ? 'חבר' : 'חברה'}</div>
-                <div style="font-size:20px; font-weight:800; color:var(--ac); margin-top:5px">${S.title}</div>
-            </div>
-            <div class="card" style="border-right: 4px solid var(--pu)">
-                <label>נתוני פנסיה (לפי פרופיל):</label>
-                <div style="display:flex; justify-content:space-between; margin-top:10px">
-                    <span>גיל: ${S.profile.age}</span>
-                    <span style="color:var(--pu); font-weight:bold">מגדר: ${S.profile.gender === 'male' ? 'זכר' : 'נקבה'}</span>
-                </div>
-            </div>
-        `;
+    if (TAB === 'funds') {
+        renderFunds(pg);
+    } else if (TAB === 'goals') {
+        renderGoals(pg);
+    } else if (TAB === 'expenses') {
+        renderExpenses(pg);
     } else {
-        // טאב הגדרות עם השדות שביקשת
-        var card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `<div style="font-weight:bold; margin-bottom:15px">הגדרות פרופיל</div>`;
-        
-        var lblG = document.createElement('label'); lblG.innerText = 'מגדר';
-        var selG = document.createElement('select'); selG.className = 'si2';
-        selG.innerHTML = `<option value="male" ${S.profile.gender==='male'?'selected':''}>זכר</option>
-                          <option value="female" ${S.profile.gender==='female'?'selected':''}>נקבה</option>`;
-        selG.onchange = (e) => { S.profile.gender = e.target.value; save(); };
-
-        var lblA = document.createElement('label'); lblA.innerText = 'גיל (מספר שלם)';
-        var inpA = document.createElement('input'); inpA.type = 'number'; inpA.className = 'ni2';
-        inpA.value = S.profile.age;
-        inpA.oninput = (e) => { S.profile.age = parseInt(e.target.value) || 0; save(); };
-
-        card.appendChild(lblG); card.appendChild(selG);
-        card.appendChild(document.createElement('br'));
-        card.appendChild(lblA); card.appendChild(inpA);
-        pg.appendChild(card);
+        renderSummary(pg);
     }
     app.appendChild(pg);
+}
+
+function renderFunds(pg) {
+    var html = `<div class="tw"><table><thead><tr><th>שם הקרן</th><th>סכום</th><th>סוג</th><th></th></tr></thead><tbody>`;
+    S.funds.forEach((f, i) => {
+        html += `<tr>
+            <td><input type="text" class="ti" value="${f.name||''}" oninput="S.funds[${i}].name=this.value;save()"></td>
+            <td><input type="number" class="ni2" value="${f.amount||0}" oninput="S.funds[${i}].amount=this.value;save()"></td>
+            <td>
+                <select class="si2" onchange="S.funds[${i}].type=this.value;save()">
+                    <option value="klali" ${f.type==='klali'?'selected':''}>כללי</option>
+                    <option value="shanati" ${f.type==='shanati'?'selected':''}>שנתי</option>
+                </select>
+            </td>
+            <td><button class="delbtn" onclick="S.funds.splice(${i},1);save();render()">✕</button></td>
+        </tr>`;
+    });
+    html += `</tbody></table></div>
+    <button class="addbtn" onclick="S.funds.push({id:uid(),name:'',amount:0,type:'klali'});save();render()">+ הוסף קרן</button>`;
+    pg.innerHTML = html;
+}
+
+function renderGoals(pg) {
+    var html = `<div class="tw"><table><thead><tr><th>יעד</th><th>סכום</th><th>קטגוריה</th><th></th></tr></thead><tbody>`;
+    S.goals.forEach((g, i) => {
+        html += `<tr>
+            <td><input type="text" class="ti" value="${g.name||''}" oninput="S.goals[${i}].name=this.value;save()"></td>
+            <td><input type="number" class="ni2" value="${g.amount||0}" oninput="S.goals[${i}].amount=this.value;save()"></td>
+            <td><input type="text" class="ti" value="${g.category||''}" oninput="S.goals[${i}].category=this.value;save()"></td>
+            <td><button class="delbtn" onclick="S.goals.splice(${i},1);save();render()">✕</button></td>
+        </tr>`;
+    });
+    html += `</tbody></table></div>
+    <button class="addbtn" onclick="S.goals.push({id:uid(),name:'',amount:0,category:''});save();render()">+ הוסף יעד</button>`;
+    pg.innerHTML = html;
+}
+
+function renderExpenses(pg) {
+    var html = `<div class="tw"><table><thead><tr><th>תיאור</th><th>סכום</th><th></th></tr></thead><tbody>`;
+    S.expenses.forEach((e, i) => {
+        html += `<tr>
+            <td><input type="text" class="ti" value="${e.purpose||''}" oninput="S.expenses[${i}].purpose=this.value;save()"></td>
+            <td><input type="number" class="ni2" value="${e.amount||0}" oninput="S.expenses[${i}].amount=this.value;save()"></td>
+            <td><button class="delbtn" onclick="S.expenses.splice(${i},1);save();render()">✕</button></td>
+        </tr>`;
+    });
+    html += `</tbody></table></div>
+    <button class="addbtn" onclick="S.expenses.push({id:uid(),purpose:'',amount:0});save();render()">+ הוסף הוצאה</button>`;
+    pg.innerHTML = html;
+}
+
+function renderSummary(pg) {
+    var totalFunds = S.funds.reduce((a, b) => a + (parseFloat(b.amount) || 0), 0);
+    var totalGoals = S.goals.reduce((a, b) => a + (parseFloat(b.amount) || 0), 0);
+    var totalExp = S.expenses.reduce((a, b) => a + (parseFloat(b.amount) || 0), 0);
+
+    pg.innerHTML = `
+        <div class="sc">
+            <div class="sc-lbl">סה"כ בקרנות</div>
+            <div class="sc-val" style="color:var(--ac)">₪${fmtN(totalFunds)}</div>
+        </div>
+        <div class="sc">
+            <div class="sc-lbl">סה"כ יעדים</div>
+            <div class="sc-val" style="color:var(--or)">₪${fmtN(totalGoals)}</div>
+        </div>
+        <div class="sc">
+            <div class="sc-lbl">יתרה חופשית</div>
+            <div class="sc-val" style="color:var(--gn)">₪${fmtN(totalFunds - totalGoals)}</div>
+        </div>
+        <div class="sc">
+            <div class="sc-lbl">הוצאות החודש</div>
+            <div class="sc-val" style="color:var(--rd)">₪${fmtN(totalExp)}</div>
+        </div>
+    `;
+}
+
+function doExport() {
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(S.funds), "קרנות");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(S.goals), "יעדים");
+    XLSX.writeFile(wb, S.title + ".xlsx");
 }
 
 render();

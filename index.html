@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,70 +8,61 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-:root {
+:root{
   --bg:#0f172a;--sf:#1e293b;--sl:#293548;--bdr:#334155;
-  --ac:#38bdf8;--gn:#4ade80;--rd:#f87171;--or:#fb923c;--pu:#c084fc;
+  --ac:#38bdf8;--gn:#4ade80;--rd:#f87171;--or:#fb923c;
   --tx:#e2e8f0;--dm:#94a3b8;--mt:#64748b;--wh:#f8fafc;
   --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);
 }
 html{-webkit-text-size-adjust:100%;height:100%;}
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,sans-serif;direction:rtl;min-height:100vh;}
-button,input,select{font-family:-apple-system,sans-serif;-webkit-appearance:none;appearance:none;outline:none;}
-
-.hdr{background:var(--sf);border-bottom:1px solid var(--bdr);padding:10px 14px;padding-top:max(var(--st),10px);position:sticky;top:0;z-index:100;}
-.hdr-row{display:flex;align-items:center;gap:10px;}
-.title-inp{background:transparent;border:none;border-bottom:1px solid transparent;color:var(--wh);font-size:17px;font-weight:700;flex:1;text-align:center;min-height:36px;padding:4px 8px;}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,Helvetica,sans-serif;direction:rtl;min-height:100%;overflow-x:hidden;}
+button,input,select{font-family:-apple-system,Helvetica,sans-serif;-webkit-appearance:none;appearance:none;outline:none;border-radius:0;}
+.hdr{background:var(--sf);border-bottom:1px solid var(--bdr);padding:8px 10px;padding-top:max(var(--st),8px);position:sticky;top:0;z-index:100;}
+.hdr-row{display:flex;align-items:center;gap:6px;}
+.title-inp{background:transparent;border:none;border-bottom:1px solid transparent;color:var(--wh);font-size:16px;font-weight:700;flex:1;text-align:center;padding:4px 6px;min-height:36px;}
 .title-inp:focus{border-bottom-color:var(--ac);}
-.exp-btn{background:var(--sl);border:1px solid var(--bdr);border-radius:8px;color:var(--tx);padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
-
+.hbtn{background:var(--sl);border:1px solid var(--bdr);border-radius:7px;color:var(--tx);padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;min-width:44px;}
 .tabs{display:flex;background:var(--bg);border-bottom:1px solid var(--bdr);}
-.tab{flex:1;padding:10px 4px;border:none;background:transparent;color:var(--mt);font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;min-height:44px;text-align:center;}
+.tab{flex:1;padding:10px 2px;border:none;background:transparent;color:var(--mt);font-size:10px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;min-height:44px;text-align:center;}
 .tab.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:700;}
-
-.pg{padding:12px 12px;padding-bottom:calc(70px + var(--sb));}
-
-.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--bdr);margin-bottom:10px;}
+.pg{padding:10px;padding-bottom:calc(60px + var(--sb));}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:9px;border:1px solid var(--bdr);margin-bottom:10px;}
 table{width:100%;border-collapse:collapse;}
-thead th{background:var(--sl);color:var(--dm);font-size:11px;font-weight:600;padding:8px 8px;text-align:right;border-bottom:1px solid var(--bdr);white-space:nowrap;}
+thead th{background:var(--sl);color:var(--dm);font-size:11px;font-weight:600;padding:7px 6px;text-align:right;border-bottom:1px solid var(--bdr);white-space:nowrap;}
 tbody tr{border-bottom:1px solid var(--bdr);}
 tbody tr:last-child{border-bottom:none;}
-td{padding:4px 5px;vertical-align:middle;}
-
-.ti{background:transparent;border:none;color:var(--tx);font-size:13px;min-height:38px;padding:4px 6px;border-radius:6px;width:100%;}
-.ti:focus{background:var(--sl);}
-.ni2{background:transparent;border:none;color:var(--ac);font-size:13px;font-weight:600;min-height:38px;padding:4px 6px;border-radius:6px;width:100%;direction:ltr;text-align:left;font-family:'Courier New',monospace;}
-.ni2:focus{background:var(--sl);}
-.si2{background:transparent;border:none;color:var(--tx);font-size:12px;min-height:38px;padding:4px 6px;border-radius:6px;width:100%;}
-.si2:focus{background:var(--sl);}
-.ro{background:transparent;border:none;color:var(--dm);font-size:13px;min-height:38px;padding:4px 6px;font-family:'Courier New',monospace;white-space:nowrap;}
-
-.delbtn{background:none;border:none;color:var(--mt);font-size:15px;cursor:pointer;min-width:36px;min-height:38px;display:flex;align-items:center;justify-content:center;}
-.delbtn:active{color:var(--rd);}
-
-.addbtn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;background:var(--sf);border:1px dashed var(--bdr);border-radius:10px;color:var(--dm);font-size:13px;font-weight:600;cursor:pointer;min-height:44px;}
-.addbtn:active{border-color:var(--ac);color:var(--ac);}
-
-.sec{color:var(--wh);font-size:14px;font-weight:700;margin:16px 0 8px;}
-.note{color:var(--mt);font-size:12px;text-align:center;padding:20px;}
-
-.cat-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--sf);border-radius:9px;border:1px solid var(--bdr);margin-bottom:6px;}
-.cat-name{color:var(--wh);font-size:13px;font-weight:600;}
-.cat-nums{display:flex;gap:14px;align-items:center;}
-.cn{font-size:11px;color:var(--mt);}
-.cn span{font-family:'Courier New',monospace;font-weight:600;}
-.cn.pos span{color:var(--gn);}
-.cn.neg span{color:var(--rd);}
-
-.sc{background:var(--sf);border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-bottom:10px;}
-.sc-lbl{color:var(--dm);font-size:12px;margin-bottom:4px;}
-.sc-val{font-size:28px;font-weight:800;font-family:'Courier New',monospace;direction:ltr;text-align:right;}
-.sc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);}
+td{padding:3px 4px;vertical-align:middle;}
+.ti{background:transparent;border:none;color:var(--tx);font-size:13px;min-height:40px;padding:4px 6px;border-radius:5px;width:100%;}
+.ti:focus{background:var(--sl);outline:none;}
+.ni2{background:transparent;border:none;color:var(--ac);font-size:13px;font-weight:600;min-height:40px;padding:4px 6px;border-radius:5px;width:100%;direction:ltr;text-align:left;font-family:Courier,monospace;}
+.ni2:focus{background:var(--sl);outline:none;}
+.si2{background:transparent;border:none;color:var(--tx);font-size:12px;min-height:40px;padding:4px 4px;border-radius:5px;width:100%;}
+.si2:focus{background:var(--sl);outline:none;}
+.delbtn{background:none;border:none;color:var(--mt);font-size:14px;cursor:pointer;min-width:36px;min-height:40px;display:flex;align-items:center;justify-content:center;padding:0;}
+.addbtn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:11px;background:var(--sf);border:1px dashed var(--bdr);border-radius:9px;color:var(--dm);font-size:13px;font-weight:600;cursor:pointer;min-height:44px;}
+.sec{color:var(--wh);font-size:13px;font-weight:700;margin:14px 0 7px;}
+.note{color:var(--mt);font-size:12px;text-align:center;padding:16px;}
+.cat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--sf);border-radius:8px;border:1px solid var(--bdr);margin-bottom:5px;gap:6px;}
+.cat-name{color:var(--wh);font-size:12px;font-weight:600;flex-shrink:0;}
+.cat-nums{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.cn{font-size:10px;color:var(--mt);}
+.cns{font-family:Courier,monospace;font-weight:600;}
+.pos .cns{color:var(--gn);}
+.neg .cns{color:var(--rd);}
+.sc{background:var(--sf);border:1px solid var(--bdr);border-radius:11px;padding:14px;margin-bottom:9px;}
+.sc-lbl{color:var(--dm);font-size:11px;margin-bottom:3px;}
+.sc-val{font-size:26px;font-weight:800;font-family:Courier,monospace;direction:ltr;text-align:right;}
+.sc-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bdr);}
 .sc-row:last-child{border-bottom:none;}
-.sc-rl{color:var(--dm);font-size:13px;}
-.sc-rv{font-size:13px;font-weight:700;font-family:'Courier New',monospace;}
-.bdg{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+.sc-rl{color:var(--dm);font-size:12px;}
+.sc-rv{font-size:12px;font-weight:700;font-family:Courier,monospace;text-align:left;}
+.roamt{color:var(--or);font-size:13px;font-weight:700;font-family:Courier,monospace;padding:4px 6px;display:block;white-space:nowrap;}
+.ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);display:flex;align-items:flex-end;justify-content:center;}
+.mdl{background:var(--sf);border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:20px;padding-bottom:max(20px,var(--sb));border:1px solid var(--bdr);border-bottom:none;}
+.mdl h3{color:var(--wh);font-size:15px;font-weight:700;margin-bottom:12px;text-align:center;}
+.mdl p{color:var(--dm);font-size:12px;line-height:1.7;margin-bottom:14px;text-align:center;}
+.mclose{width:100%;padding:12px;background:var(--sl);border:1px solid var(--bdr);border-radius:9px;color:var(--tx);font-size:14px;font-weight:600;cursor:pointer;min-height:44px;}
 </style>
-
 </head>
 <body>
 <div id="app"></div>
@@ -80,451 +72,305 @@ var TAB = 'funds';
 var S;
 
 function defState() {
-  return { title: defTitle(), funds: [], goals: [], expenses: [] };
+return { title: defTitle(), funds: [], goals: [], expenses: [] };
 }
-
 function defTitle() {
-  var d = new Date();
-  var M = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
-  return M[d.getMonth()] + ' ' + d.getFullYear();
+var d = new Date();
+var M = [“ינואר”,“פברואר”,“מרץ”,“אפריל”,“מאי”,“יוני”,“יולי”,“אוגוסט”,“ספטמבר”,“אוקטובר”,“נובמבר”,“דצמבר”];
+return M[d.getMonth()] + ’ ’ + d.getFullYear();
 }
-
-try { var r = localStorage.getItem(KEY); S = r ? JSON.parse(r) : defState(); } catch(e) { S = defState(); }
+try { var _r = localStorage.getItem(KEY); S = _r ? JSON.parse(_r) : defState(); } catch(e) { S = defState(); }
 
 var TIMER = null;
 function save() {
-  clearTimeout(TIMER);
-  TIMER = setTimeout(function() {
-    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
-  }, 400);
+clearTimeout(TIMER);
+TIMER = setTimeout(function() {
+try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
+}, 400);
 }
-
-function uid() { return '_' + Math.random().toString(36).slice(2, 9); }
-
-function fmtN(n) {
-  var v = parseFloat(n);
-  if (isNaN(v)) return '0';
-  return v.toLocaleString('he-IL');
-}
-
-function getFund(id) {
-  for (var i = 0; i < S.funds.length; i++) if (S.funds[i].id === id) return S.funds[i];
-  return null;
-}
-
+function uid() { return ‘_’ + Math.random().toString(36).slice(2,9); }
+function fmtN(n) { var v = parseFloat(n); if (isNaN(v)) return ‘0’; return v.toLocaleString(‘he-IL’); }
+function getFund(id) { for (var i = 0; i < S.funds.length; i++) if (S.funds[i].id === id) return S.funds[i]; return null; }
 function getGoalAmt(g) {
-  if (g.type === 'shanati') {
-    var f = getFund(g.fundId);
-    return f ? (parseFloat(f.amount) || 0) : 0;
-  }
-  return parseFloat(g.amount) || 0;
+if (g.type === ‘shanati’) { var f = getFund(g.fundId); return f ? (parseFloat(f.amount)||0) : 0; }
+return parseFloat(g.amount)||0;
 }
+function shnatiFunds() { var o=[]; for(var i=0;i<S.funds.length;i++) if(S.funds[i].type===‘shanati’) o.push(S.funds[i]); return o; }
+function goalCategories() { var o=[],s={}; for(var i=0;i<S.goals.length;i++){var c=S.goals[i].category;if(c&&!s[c]){s[c]=true;o.push(c);}} return o; }
+function expBycat() { var m={}; for(var i=0;i<S.expenses.length;i++){var e=S.expenses[i];var c=e.category||’’;if(!m[c])m[c]=0;m[c]+=parseFloat(e.amount)||0;} return m; }
+function klaliBudgetBycat() { var m={}; for(var i=0;i<S.goals.length;i++){var g=S.goals[i];if(g.type===‘klali’){var c=g.category||’’;if(!m[c])m[c]=0;m[c]+=getGoalAmt(g);}} return m; }
 
-function shnatiFunds() {
-  var out = [];
-  for (var i = 0; i < S.funds.length; i++) if (S.funds[i].type === 'shanati') out.push(S.funds[i]);
-  return out;
-}
-
-function goalCategories() {
-  var out = [], seen = {};
-  for (var i = 0; i < S.goals.length; i++) {
-    var c = S.goals[i].category;
-    if (c && !seen[c]) { seen[c] = true; out.push(c); }
-  }
-  return out;
-}
-
-function expBycat() {
-  var m = {};
-  for (var i = 0; i < S.expenses.length; i++) {
-    var e = S.expenses[i];
-    var c = e.category || '';
-    if (!m[c]) m[c] = 0;
-    m[c] += parseFloat(e.amount) || 0;
-  }
-  return m;
-}
-
-function klaliBudgetBycat() {
-  var m = {};
-  for (var i = 0; i < S.goals.length; i++) {
-    var g = S.goals[i];
-    if (g.type === 'klali') {
-      var c = g.category || '';
-      if (!m[c]) m[c] = 0;
-      m[c] += getGoalAmt(g);
-    }
-  }
-  return m;
-}
-
+/* –– DOM helpers –– */
 function ce(t) { return document.createElement(t); }
-function tx(s) { return document.createTextNode(String(s == null ? '' : s)); }
+function tx(s) { return document.createTextNode(String(s==null?’’:s)); }
+function ap(p,kids) { if(!kids)return p; for(var i=0;i<kids.length;i++){var k=kids[i];if(k==null||k===false)continue;p.appendChild(typeof k===‘string’||typeof k===‘number’?tx(k):k);} return p; }
+function el(tag,cls,sty,kids,evs) {
+var e=ce(tag); if(cls)e.className=cls; if(sty)e.style.cssText=sty;
+if(kids)ap(e,kids); if(evs){for(var n in evs)e.addEventListener(n,evs[n]);}return e;
+}
+function dv(cls,sty,kids,evs){return el(‘div’,cls,sty,kids,evs);}
+function sp(cls,sty,kids){return el(‘span’,cls,sty,kids);}
+function bt(cls,sty,txt,fn){var b=ce(‘button’);if(cls)b.className=cls;if(sty)b.style.cssText=sty;b.appendChild(tx(txt));b.addEventListener(‘click’,fn);return b;}
+function ti(val,fn,sty,ph){var i=ce(‘input’);i.type=‘text’;i.className=‘ti’;if(sty)i.style.cssText=sty;i.value=val||’’;if(ph)i.placeholder=ph;i.addEventListener(‘input’,function(){fn(i.value);});return i;}
+function ni(val,fn){var i=ce(‘input’);i.type=‘tel’;i.className=‘ni2’;i.setAttribute(‘inputmode’,‘decimal’);i.value=val!=null?String(val):’’;i.addEventListener(‘input’,function(){var v=i.value.replace(/[^\d.]/g,’’);if(i.value!==v)i.value=v;fn(parseFloat(v)||0);});return i;}
+function si(opts,val,fn){var s=ce(‘select’);s.className=‘si2’;for(var i=0;i<opts.length;i++){var op=ce(‘option’);op.value=opts[i].v;op.textContent=opts[i].l;if(opts[i].v===val)op.selected=true;s.appendChild(op);}s.addEventListener(‘change’,function(){fn(s.value);});return s;}
+function dbtn(fn){return bt(‘delbtn’,null,‘✕’,fn);}
+function tth(txt,w){var t=ce(‘th’);t.appendChild(tx(txt));if(w)t.style.minWidth=w;return t;}
+function ttd(w){var t=ce(‘td’);if(w)t.style.minWidth=w;return t;}
+function fld(lbl,inp,mb){var w=dv(null,‘margin-bottom:’+(mb||10)+‘px;’,[el(‘label’,null,‘color:var(–mt);font-size:11px;display:block;margin-bottom:3px;’,[lbl]),inp]);return w;}
 
-function el(tag, cls, sty, kids, ev) {
-  var e = ce(tag);
-  if (cls) e.className = cls;
-  if (sty) e.style.cssText = sty;
-  if (kids) for (var i = 0; i < kids.length; i++) {
-    var k = kids[i];
-    if (k == null || k === false) continue;
-    e.appendChild(typeof k === 'string' || typeof k === 'number' ? tx(k) : k);
-  }
-  if (ev) for (var n in ev) e.addEventListener(n, ev[n]);
-  return e;
-}
-function dv(cls, sty, kids, ev) { return el('div', cls, sty, kids, ev); }
-function sp(cls, sty, kids) { return el('span', cls, sty, kids); }
-function bt(cls, sty, txt, fn) {
-  var b = ce('button');
-  if (cls) b.className = cls;
-  if (sty) b.style.cssText = sty;
-  b.appendChild(tx(txt));
-  b.addEventListener('click', fn);
-  return b;
-}
-function ti(val, fn, sty, ph) {
-  var i = ce('input'); i.type = 'text'; i.className = 'ti';
-  if (sty) i.style.cssText = sty;
-  i.value = val || '';
-  if (ph) i.placeholder = ph;
-  i.addEventListener('input', function() { fn(i.value); });
-  return i;
-}
-function ni(val, fn) {
-  var i = ce('input'); i.type = 'tel'; i.className = 'ni2';
-  i.setAttribute('inputmode', 'decimal');
-  i.value = val != null ? String(val) : '';
-  i.addEventListener('input', function() {
-    var v = i.value.replace(/[^\d.]/g, '');
-    if (i.value !== v) i.value = v;
-    fn(parseFloat(v) || 0);
-  });
-  return i;
-}
-function si(opts, val, fn) {
-  var s = ce('select'); s.className = 'si2';
-  for (var i = 0; i < opts.length; i++) {
-    var op = ce('option'); op.value = opts[i].v; op.textContent = opts[i].l;
-    if (opts[i].v === val) op.selected = true;
-    s.appendChild(op);
-  }
-  s.addEventListener('change', function() { fn(s.value); });
-  return s;
-}
-function dbtn(fn) { return bt('delbtn', null, '✕', fn); }
-function th(txt, w) {
-  var t = ce('th');
-  t.appendChild(tx(txt));
-  if (w) t.style.minWidth = w;
-  return t;
-}
-function td(w) { var t = ce('td'); if (w) t.style.minWidth = w; return t; }
-
+/* –– RENDER –– */
 function render() {
-  var app = document.getElementById('app');
-  app.innerHTML = '';
+var app = document.getElementById(‘app’);
+app.innerHTML = ‘’;
 
-  var tinp = ce('input'); tinp.type = 'text'; tinp.className = 'title-inp';
-  tinp.value = S.title || '';
-  tinp.addEventListener('input', function() { S.title = tinp.value; save(); });
+var tinp = ce(‘input’); tinp.type=‘text’; tinp.className=‘title-inp’; tinp.value=S.title||’’;
+tinp.addEventListener(‘input’,function(){S.title=tinp.value;save();});
 
-  app.appendChild(dv('hdr', null, [
-    dv('hdr-row', null, [tinp, bt('exp-btn', null, '💾 HTML', saveHTML), bt('exp-btn', null, '📤 xlsx', doExport)])
-  ]));
+app.appendChild(dv(‘hdr’,null,[
+dv(‘hdr-row’,null,[
+tinp,
+bt(‘hbtn’,null,‘💾 HTML’,saveHTML),
+bt(‘hbtn’,null,‘📤 xlsx’,doExport)
+])
+]));
 
-  var tDefs = [
-    { id: 'funds', l: '🏦 קרנות' },
-    { id: 'goals', l: '🎯 יעדים' },
-    { id: 'expenses', l: '💸 הוצאות' },
-    { id: 'summary', l: '📊 סיכום' }
-  ];
-  var tabBar = dv('tabs');
-  for (var i = 0; i < tDefs.length; i++) {
-    (function(t) {
-      var b = ce('button');
-      b.className = 'tab' + (TAB === t.id ? ' on' : '');
-      b.appendChild(tx(t.l));
-      b.addEventListener('click', function() { TAB = t.id; render(); });
-      tabBar.appendChild(b);
-    })(tDefs[i]);
-  }
-  app.appendChild(tabBar);
+var TABS=[{id:‘funds’,l:‘🏦 קרנות’},{id:‘goals’,l:‘🎯 יעדים’},{id:‘expenses’,l:‘💸 הוצאות’},{id:‘summary’,l:‘📊 סיכום’}];
+var tabBar=dv(‘tabs’);
+for(var i=0;i<TABS.length;i++){
+(function(t){
+var b=ce(‘button’); b.className=‘tab’+(TAB===t.id?’ on’:’’); b.appendChild(tx(t.l));
+b.addEventListener(‘click’,function(){TAB=t.id;render();});
+tabBar.appendChild(b);
+})(TABS[i]);
+}
+app.appendChild(tabBar);
 
-  var pg = dv('pg');
-  if (TAB === 'funds') rFunds(pg);
-  else if (TAB === 'goals') rGoals(pg);
-  else if (TAB === 'expenses') rExpenses(pg);
-  else rSummary(pg);
-  app.appendChild(pg);
+var pg=dv(‘pg’);
+if(TAB===‘funds’)rFunds(pg);
+else if(TAB===‘goals’)rGoals(pg);
+else if(TAB===‘expenses’)rExpenses(pg);
+else rSummary(pg);
+app.appendChild(pg);
 }
 
-function rFunds(pg) {
-  var w = dv('tw');
-  var tbl = ce('table');
-  var thead = ce('thead'); var hr = ce('tr');
-  hr.appendChild(th('שם הקרן', '130px'));
-  hr.appendChild(th('מספר חשבון', '110px'));
-  hr.appendChild(th('סכום', '100px'));
-  hr.appendChild(th('ייעוד', '90px'));
-  hr.appendChild(th('', '36px'));
-  thead.appendChild(hr); tbl.appendChild(thead);
-
-  var tbody = ce('tbody');
-  for (var i = 0; i < S.funds.length; i++) {
-    (function(f, idx) {
-      var tr = ce('tr');
-      var td1 = td('130px'); td1.appendChild(ti(f.name, function(v){f.name=v;save();},'', 'שם הקרן')); tr.appendChild(td1);
-      var td2 = td('110px'); td2.appendChild(ti(f.num, function(v){f.num=v;save();},'direction:ltr;text-align:left;', 'מספר')); tr.appendChild(td2);
-      var td3 = td('100px'); td3.appendChild(ni(f.amount, function(v){f.amount=v;save();})); tr.appendChild(td3);
-      var td4 = td('90px'); td4.appendChild(si([{v:'klali',l:'כללי'},{v:'shanati',l:'שנתי'}], f.type||'klali', function(v){f.type=v;save();})); tr.appendChild(td4);
-      var td5 = td('36px'); td5.appendChild(dbtn(function(){S.funds.splice(idx,1);save();render();})); tr.appendChild(td5);
-      tbody.appendChild(tr);
-    })(S.funds[i], i);
-  }
-  tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
-  pg.appendChild(bt('addbtn', null, '+ הוסף קרן', function(){S.funds.push({id:uid(),name:'',num:'',amount:0,type:'klali'});save();render();}));
+/* –– FUNDS –– */
+function rFunds(pg){
+var w=dv(‘tw’); var tbl=ce(‘table’);
+var thead=ce(‘thead’); var hr=ce(‘tr’);
+hr.appendChild(tth(‘שם הקרן’,‘110px’)); hr.appendChild(tth(‘מספר חשבון’,‘100px’));
+hr.appendChild(tth(‘סכום’,‘90px’)); hr.appendChild(tth(‘ייעוד’,‘80px’)); hr.appendChild(tth(’’,‘34px’));
+thead.appendChild(hr); tbl.appendChild(thead);
+var tbody=ce(‘tbody’);
+for(var i=0;i<S.funds.length;i++){
+(function(f,idx){
+var tr=ce(‘tr’);
+var t1=ttd(‘110px’); t1.appendChild(ti(f.name,function(v){f.name=v;save();},’’,‘שם הקרן’)); tr.appendChild(t1);
+var t2=ttd(‘100px’); t2.appendChild(ti(f.num,function(v){f.num=v;save();},‘direction:ltr;text-align:left;’,‘מספר’)); tr.appendChild(t2);
+var t3=ttd(‘90px’); t3.appendChild(ni(f.amount,function(v){f.amount=v;save();})); tr.appendChild(t3);
+var t4=ttd(‘80px’); t4.appendChild(si([{v:‘klali’,l:‘כללי’},{v:‘shanati’,l:‘שנתי’}],f.type||‘klali’,function(v){f.type=v;save();})); tr.appendChild(t4);
+var t5=ttd(‘34px’); t5.appendChild(dbtn(function(){S.funds.splice(idx,1);save();render();})); tr.appendChild(t5);
+tbody.appendChild(tr);
+})(S.funds[i],i);
+}
+tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
+pg.appendChild(bt(‘addbtn’,null,’+ הוסף קרן’,function(){S.funds.push({id:uid(),name:’’,num:’’,amount:0,type:‘klali’});save();render();}));
 }
 
-function rGoals(pg) {
-  var w = dv('tw');
-  var tbl = ce('table');
-  var thead = ce('thead'); var hr = ce('tr');
-  hr.appendChild(th('סוג', '80px'));
-  hr.appendChild(th('קרן (שנתי)', '140px'));
-  hr.appendChild(th('סכום', '100px'));
-  hr.appendChild(th('קטגוריה', '120px'));
-  hr.appendChild(th('', '36px'));
-  thead.appendChild(hr); tbl.appendChild(thead);
-
-  var tbody = ce('tbody');
-  var sfunds = shnatiFunds();
-  for (var i = 0; i < S.goals.length; i++) {
-    (function(g, idx) {
-      var tr = ce('tr');
-      var td1 = td('80px');
-      td1.appendChild(si([{v:'klali',l:'כללי'},{v:'shanati',l:'שנתי'}], g.type||'klali', function(v){
-        g.type = v;
-        if (v === 'shanati') g.amount = null;
-        save(); render();
-      }));
-      tr.appendChild(td1);
-
-      var td2 = td('140px');
-      if (g.type === 'shanati') {
-        var fopts = [{v:'',l:'— בחר —'}];
-        for (var fi = 0; fi < sfunds.length; fi++) fopts.push({v:sfunds[fi].id, l:sfunds[fi].name});
-        td2.appendChild(si(fopts, g.fundId||'', function(v){g.fundId=v;save();render();}));
-      } else {
-        td2.appendChild(sp(null,'color:var(--mt);font-size:12px;padding:4px 6px;',['—']));
-      }
-      tr.appendChild(td2);
-
-      var td3 = td('100px');
-      if (g.type === 'shanati') {
-        var amt = getGoalAmt(g);
-        td3.appendChild(sp(null,'color:var(--or);font-size:13px;font-weight:700;font-family:Courier New,monospace;padding:4px 6px;display:block;',['₪'+fmtN(amt)]));
-      } else {
-        td3.appendChild(ni(g.amount, function(v){g.amount=v;save();}));
-      }
-      tr.appendChild(td3);
-
-      var td4 = td('120px'); td4.appendChild(ti(g.category, function(v){g.category=v;save();},'','קטגוריה')); tr.appendChild(td4);
-      var td5 = td('36px'); td5.appendChild(dbtn(function(){S.goals.splice(idx,1);save();render();})); tr.appendChild(td5);
-      tbody.appendChild(tr);
-    })(S.goals[i], i);
-  }
-  tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
-  pg.appendChild(bt('addbtn', null, '+ הוסף יעד', function(){S.goals.push({id:uid(),type:'klali',fundId:'',amount:0,category:''});save();render();}));
+/* –– GOALS –– */
+function rGoals(pg){
+var w=dv(‘tw’); var tbl=ce(‘table’);
+var thead=ce(‘thead’); var hr=ce(‘tr’);
+hr.appendChild(tth(‘סוג’,‘76px’)); hr.appendChild(tth(‘קרן (שנתי)’,‘130px’));
+hr.appendChild(tth(‘סכום’,‘90px’)); hr.appendChild(tth(‘קטגוריה’,‘110px’)); hr.appendChild(tth(’’,‘34px’));
+thead.appendChild(hr); tbl.appendChild(thead);
+var tbody=ce(‘tbody’);
+var sfunds=shnatiFunds();
+for(var i=0;i<S.goals.length;i++){
+(function(g,idx){
+var tr=ce(‘tr’);
+var t1=ttd(‘76px’);
+t1.appendChild(si([{v:‘klali’,l:‘כללי’},{v:‘shanati’,l:‘שנתי’}],g.type||‘klali’,function(v){g.type=v;if(v===‘shanati’)g.amount=null;save();render();}));
+tr.appendChild(t1);
+var t2=ttd(‘130px’);
+if(g.type===‘shanati’){
+var fopts=[{v:’’,l:’— בחר —’}];
+for(var fi=0;fi<sfunds.length;fi++) fopts.push({v:sfunds[fi].id,l:sfunds[fi].name});
+t2.appendChild(si(fopts,g.fundId||’’,function(v){g.fundId=v;save();render();}));
+} else {
+t2.appendChild(sp(null,‘color:var(–mt);font-size:12px;padding:4px 6px;’,[’—’]));
+}
+tr.appendChild(t2);
+var t3=ttd(‘90px’);
+if(g.type===‘shanati’){
+t3.appendChild(sp(‘roamt’,null,[‘₪’+fmtN(getGoalAmt(g))]));
+} else {
+t3.appendChild(ni(g.amount,function(v){g.amount=v;save();}));
+}
+tr.appendChild(t3);
+var t4=ttd(‘110px’); t4.appendChild(ti(g.category,function(v){g.category=v;save();},’’,‘קטגוריה’)); tr.appendChild(t4);
+var t5=ttd(‘34px’); t5.appendChild(dbtn(function(){S.goals.splice(idx,1);save();render();})); tr.appendChild(t5);
+tbody.appendChild(tr);
+})(S.goals[i],i);
+}
+tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
+pg.appendChild(bt(‘addbtn’,null,’+ הוסף יעד’,function(){S.goals.push({id:uid(),type:‘klali’,fundId:’’,amount:0,category:’’});save();render();}));
 }
 
-function rExpenses(pg) {
-  var expMap = expBycat();
-  var budgetMap = klaliBudgetBycat();
-  var cats = goalCategories();
-  var klaliCats = [];
-  for (var i = 0; i < cats.length; i++) if (budgetMap[cats[i]] != null) klaliCats.push(cats[i]);
-
-  if (klaliCats.length > 0) {
-    pg.appendChild(dv('sec', null, ['מצב תקציב לפי קטגוריה']));
-    for (var i = 0; i < klaliCats.length; i++) {
-      var c = klaliCats[i];
-      var bud = budgetMap[c] || 0;
-      var spt = expMap[c] || 0;
-      var rem = bud - spt;
-      var pos = rem >= 0;
-      pg.appendChild(dv('cat-row', null, [
-        sp('cat-name', null, [c]),
-        dv('cat-nums', null, [
-          dv('cn', null, ['תקציב: ', sp(null, null, ['₪'+fmtN(bud)])]),
-          dv('cn', null, ['הוצאה: ', sp(null, 'color:var(--rd);font-family:Courier New,monospace;font-weight:600;', ['₪'+fmtN(spt)])]),
-          dv('cn '+(pos?'pos':'neg'), null, ['יתרה: ', sp(null, null, ['₪'+fmtN(rem)])])
-        ])
-      ]));
-    }
-  }
-
-  pg.appendChild(dv('sec', null, ['רשימת הוצאות']));
-  var catOpts = [{v:'',l:'— קטגוריה —'}];
-  for (var i = 0; i < cats.length; i++) catOpts.push({v:cats[i],l:cats[i]});
-
-  var w = dv('tw');
-  var tbl = ce('table');
-  var thead = ce('thead'); var hr = ce('tr');
-  hr.appendChild(th('מטרת הוצאה','140px'));
-  hr.appendChild(th('סכום','95px'));
-  hr.appendChild(th('קטגוריה','130px'));
-  hr.appendChild(th('','36px'));
-  thead.appendChild(hr); tbl.appendChild(thead);
-
-  var tbody = ce('tbody');
-  for (var i = 0; i < S.expenses.length; i++) {
-    (function(e, idx) {
-      var tr = ce('tr');
-      var td1=td('140px'); td1.appendChild(ti(e.purpose,function(v){e.purpose=v;save();},'', 'מטרת ההוצאה')); tr.appendChild(td1);
-      var td2=td('95px'); td2.appendChild(ni(e.amount,function(v){e.amount=v;save();render();})); tr.appendChild(td2);
-      var td3=td('130px'); td3.appendChild(si(catOpts,e.category||'',function(v){e.category=v;save();render();})); tr.appendChild(td3);
-      var td4=td('36px'); td4.appendChild(dbtn(function(){S.expenses.splice(idx,1);save();render();})); tr.appendChild(td4);
-      tbody.appendChild(tr);
-    })(S.expenses[i], i);
-  }
-  tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
-
-  var tot = 0;
-  for (var i = 0; i < S.expenses.length; i++) tot += parseFloat(S.expenses[i].amount) || 0;
-  if (S.expenses.length > 0) {
-    pg.appendChild(dv(null,'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--sf);border-radius:9px;border:1px solid var(--bdr);margin-bottom:10px;',[
-      sp(null,'color:var(--dm);font-size:13px;',['סה״כ הוצאות החודש']),
-      sp(null,'color:var(--rd);font-size:16px;font-weight:800;font-family:Courier New,monospace;',['₪'+fmtN(tot)])
-    ]));
-  }
-  pg.appendChild(bt('addbtn', null, '+ הוסף הוצאה', function(){S.expenses.push({id:uid(),purpose:'',amount:0,category:''});save();render();}));
+/* –– EXPENSES –– */
+function rExpenses(pg){
+var expMap=expBycat(); var budgetMap=klaliBudgetBycat(); var cats=goalCategories();
+var klaliCats=[];
+for(var i=0;i<cats.length;i++) if(typeof budgetMap[cats[i]]!==‘undefined’) klaliCats.push(cats[i]);
+if(klaliCats.length>0){
+pg.appendChild(dv(‘sec’,null,[‘מצב תקציב לפי קטגוריה’]));
+for(var i=0;i<klaliCats.length;i++){
+var c=klaliCats[i]; var bud=budgetMap[c]||0; var spt=expMap[c]||0; var rem=bud-spt; var pos=rem>=0;
+pg.appendChild(dv(‘cat-row’,null,[
+sp(‘cat-name’,null,[c]),
+dv(‘cat-nums’,null,[
+dv(‘cn’,null,[‘תקציב: ‘,sp(‘cns’,null,[‘₪’+fmtN(bud)])]),
+dv(‘cn’,null,[‘הוצאה: ‘,sp(‘cns’,‘color:var(–rd);’,[‘₪’+fmtN(spt)])]),
+dv(‘cn ‘+(pos?‘pos’:‘neg’),null,[‘יתרה: ‘,sp(‘cns’,null,[‘₪’+fmtN(rem)])])
+])
+]));
+}
+}
+pg.appendChild(dv(‘sec’,null,[‘רשימת הוצאות’]));
+var catOpts=[{v:’’,l:’— קטגוריה —’}];
+for(var i=0;i<cats.length;i++) catOpts.push({v:cats[i],l:cats[i]});
+var w=dv(‘tw’); var tbl=ce(‘table’);
+var thead=ce(‘thead’); var hr=ce(‘tr’);
+hr.appendChild(tth(‘מטרת הוצאה’,‘130px’)); hr.appendChild(tth(‘סכום’,‘90px’)); hr.appendChild(tth(‘קטגוריה’,‘120px’)); hr.appendChild(tth(’’,‘34px’));
+thead.appendChild(hr); tbl.appendChild(thead);
+var tbody=ce(‘tbody’);
+for(var i=0;i<S.expenses.length;i++){
+(function(e,idx){
+var tr=ce(‘tr’);
+var t1=ttd(‘130px’); t1.appendChild(ti(e.purpose,function(v){e.purpose=v;save();},’’,‘מטרה’)); tr.appendChild(t1);
+var t2=ttd(‘90px’); t2.appendChild(ni(e.amount,function(v){e.amount=v;save();render();})); tr.appendChild(t2);
+var t3=ttd(‘120px’); t3.appendChild(si(catOpts,e.category||’’,function(v){e.category=v;save();render();})); tr.appendChild(t3);
+var t4=ttd(‘34px’); t4.appendChild(dbtn(function(){S.expenses.splice(idx,1);save();render();})); tr.appendChild(t4);
+tbody.appendChild(tr);
+})(S.expenses[i],i);
+}
+tbl.appendChild(tbody); w.appendChild(tbl); pg.appendChild(w);
+var tot=0; for(var i=0;i<S.expenses.length;i++) tot+=parseFloat(S.expenses[i].amount)||0;
+if(S.expenses.length>0){
+pg.appendChild(dv(null,‘display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(–sf);border-radius:8px;border:1px solid var(–bdr);margin-bottom:10px;’,[
+sp(null,‘color:var(–dm);font-size:12px;’,[‘סה״כ הוצאות החודש’]),
+sp(null,‘color:var(–rd);font-size:15px;font-weight:800;font-family:Courier,monospace;’,[‘₪’+fmtN(tot)])
+]));
+}
+pg.appendChild(bt(‘addbtn’,null,’+ הוסף הוצאה’,function(){S.expenses.push({id:uid(),purpose:’’,amount:0,category:’’});save();render();}));
 }
 
-function rSummary(pg) {
-  var klaliCap = 0, klaliGoalsTotal = 0;
-  for (var i = 0; i < S.funds.length; i++) if (S.funds[i].type === 'klali') klaliCap += parseFloat(S.funds[i].amount) || 0;
-  for (var i = 0; i < S.goals.length; i++) if (S.goals[i].type === 'klali') klaliGoalsTotal += getGoalAmt(S.goals[i]);
-  var savings = klaliCap - klaliGoalsTotal;
-  var savPos = savings >= 0;
-
-  pg.appendChild(dv('sc','border-color:rgba(56,189,248,.3);',[
-    dv('sc-lbl',null,['סה״כ הון צבור — קרנות כלליות']),
-    dv('sc-val','color:var(--ac);',['₪'+fmtN(klaliCap)])
-  ]));
-  pg.appendChild(dv('sc','border-color:rgba(251,146,60,.3);',[
-    dv('sc-lbl',null,['סה״כ יעדים — כלליים']),
-    dv('sc-val','color:var(--or);',['₪'+fmtN(klaliGoalsTotal)])
-  ]));
-  pg.appendChild(dv('sc','border-color:'+(savPos?'rgba(74,222,128,.3)':'rgba(248,113,113,.3)')+';background:'+(savPos?'rgba(74,222,128,.04)':'rgba(248,113,113,.04)')+';',[
-    dv('sc-lbl',null,['סה״כ לחסכון (הון פחות יעדים)']),
-    dv('sc-val','color:'+(savPos?'var(--gn)':'var(--rd)')+';',['₪'+fmtN(savings)])
-  ]));
-
-  pg.appendChild(dv('sec',null,['פירוט קרנות כלליות']));
-  var kfunds = [];
-  for (var i = 0; i < S.funds.length; i++) if (S.funds[i].type === 'klali') kfunds.push(S.funds[i]);
-  if (!kfunds.length) {
-    pg.appendChild(dv('note',null,['אין קרנות בקטגוריה כללי']));
-  } else {
-    var fc = dv('sc');
-    for (var i = 0; i < kfunds.length; i++) {
-      fc.appendChild(dv('sc-row',null,[
-        sp('sc-rl',null,[kfunds[i].name||(kfunds[i].num)||'—']),
-        sp('sc-rv','color:var(--ac);',['₪'+fmtN(kfunds[i].amount)])
-      ]));
-    }
-    pg.appendChild(fc);
-  }
-
-  pg.appendChild(dv('sec',null,['פירוט יעדים כלליים']));
-  var kgoals = [];
-  for (var i = 0; i < S.goals.length; i++) if (S.goals[i].type === 'klali') kgoals.push(S.goals[i]);
-  if (!kgoals.length) {
-    pg.appendChild(dv('note',null,['אין יעדים בקטגוריה כללי']));
-  } else {
-    var expMap = expBycat();
-    var gc = dv('sc');
-    for (var i = 0; i < kgoals.length; i++) {
-      var g = kgoals[i];
-      var gamt = getGoalAmt(g);
-      var gexp = expMap[g.category] || 0;
-      var grem = gamt - gexp;
-      gc.appendChild(dv('sc-row',null,[
-        dv(null,null,[
-          sp('sc-rl',null,[g.category||'—']),
-          gexp > 0 ? sp(null,'color:var(--mt);font-size:10px;margin-right:6px;',[' (הוצאה: ₪'+fmtN(gexp)+')']):null
-        ]),
-        dv(null,'text-align:left;',[
-          sp('sc-rv','color:var(--or);',['יעד: ₪'+fmtN(gamt)]),
-          gexp > 0 ? sp(null,'display:block;font-size:11px;font-family:Courier New,monospace;color:'+(grem>=0?'var(--gn)':'var(--rd)')+';font-weight:600;',['יתרה: ₪'+fmtN(grem)]):null
-        ])
-      ]));
-    }
-    pg.appendChild(gc);
-  }
+/* –– SUMMARY –– */
+function rSummary(pg){
+var klaliCap=0,klaliGoalsTotal=0;
+for(var i=0;i<S.funds.length;i++) if(S.funds[i].type===‘klali’) klaliCap+=parseFloat(S.funds[i].amount)||0;
+for(var i=0;i<S.goals.length;i++) if(S.goals[i].type===‘klali’) klaliGoalsTotal+=getGoalAmt(S.goals[i]);
+var savings=klaliCap-klaliGoalsTotal; var savPos=savings>=0;
+pg.appendChild(dv(‘sc’,‘border-color:rgba(56,189,248,.3);’,[dv(‘sc-lbl’,null,[‘סה״כ הון צבור — קרנות כלליות’]),dv(‘sc-val’,‘color:var(–ac);’,[‘₪’+fmtN(klaliCap)])]));
+pg.appendChild(dv(‘sc’,‘border-color:rgba(251,146,60,.3);’,[dv(‘sc-lbl’,null,[‘סה״כ יעדים — כלליים’]),dv(‘sc-val’,‘color:var(–or);’,[‘₪’+fmtN(klaliGoalsTotal)])]));
+pg.appendChild(dv(‘sc’,‘border-color:’+(savPos?‘rgba(74,222,128,.3)’:‘rgba(248,113,113,.3)’)+’;’,[
+dv(‘sc-lbl’,null,[‘לחסכון (הון פחות יעדים)’]),
+dv(‘sc-val’,‘color:’+(savPos?‘var(–gn)’:‘var(–rd)’)+’;’,[‘₪’+fmtN(savings)])
+]));
+pg.appendChild(dv(‘sec’,null,[‘פירוט קרנות כלליות’]));
+var kf=[]; for(var i=0;i<S.funds.length;i++) if(S.funds[i].type===‘klali’) kf.push(S.funds[i]);
+if(!kf.length){ pg.appendChild(dv(‘note’,null,[‘אין קרנות כלליות’])); }
+else {
+var fc=dv(‘sc’); for(var i=0;i<kf.length;i++){fc.appendChild(dv(‘sc-row’,null,[sp(‘sc-rl’,null,[kf[i].name||(kf[i].num)||’—’]),sp(‘sc-rv’,‘color:var(–ac);’,[‘₪’+fmtN(kf[i].amount)])]));}
+pg.appendChild(fc);
+}
+pg.appendChild(dv(‘sec’,null,[‘פירוט יעדים כלליים’]));
+var kg=[]; for(var i=0;i<S.goals.length;i++) if(S.goals[i].type===‘klali’) kg.push(S.goals[i]);
+if(!kg.length){ pg.appendChild(dv(‘note’,null,[‘אין יעדים כלליים’])); }
+else {
+var expMap=expBycat(); var gc=dv(‘sc’);
+for(var i=0;i<kg.length;i++){
+var g=kg[i]; var gamt=getGoalAmt(g); var gexp=expMap[g.category]||0; var grem=gamt-gexp;
+gc.appendChild(dv(‘sc-row’,null,[
+dv(null,null,[sp(‘sc-rl’,null,[g.category||’—’]), gexp>0?sp(null,‘color:var(–mt);font-size:10px;margin-right:5px;’,[’ הוצאה: ₪’+fmtN(gexp)]):null]),
+dv(null,‘text-align:left;’,[
+sp(‘sc-rv’,‘color:var(–or);’,[‘₪’+fmtN(gamt)]),
+gexp>0?sp(null,‘display:block;font-size:10px;font-family:Courier,monospace;font-weight:600;color:’+(grem>=0?‘var(–gn)’:‘var(–rd)’)+’;’,[‘יתרה ₪’+fmtN(grem)]):null
+])
+]));
+}
+pg.appendChild(gc);
+}
 }
 
+/* –– SAVE HTML –– */
 function saveHTML() {
-  var html = document.documentElement.outerHTML;
-  var marker = "var KEY = 'cf5';";
-  var inject = "var KEY = 'cf5';\ntry { localStorage.setItem('cf5', " + JSON.stringify(JSON.stringify(S)) + "); } catch(e) {}";
-  html = html.replace(marker, inject);
-  var b = new Blob([html], { type: 'text/html;charset=utf-8' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(b);
-  a.download = 'תזרים_' + (S.title || '').replace(/\s/g, '_') + '.html';
-  document.body.appendChild(a); a.click();
-  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
+// Build a self-contained HTML with embedded data
+var stateJson = JSON.stringify(S);
+var escapedJson = stateJson.replace(/\/g,’\\’).replace(/’/g,”\’”).replace(/<//g,’<\/’);
+var src = document.documentElement.outerHTML;
+// Replace the state-loading line with embedded state
+var inject = “var KEY = ‘cf5’;\ntry { localStorage.setItem(‘cf5’, ‘” + escapedJson + “’); } catch(e) {}\ntry { var _r = localStorage.getItem(KEY); S = _r ? JSON.parse(_r) : defState(); } catch(e) { S = defState(); }”;
+src = src.replace(“try { var _r = localStorage.getItem(KEY); S = _r ? JSON.parse(_r) : defState(); } catch(e) { S = defState(); }”, inject);
+
+var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+if (isIOS) {
+// iOS: open in new tab — user can share/save from Safari
+var w = window.open(’’, ‘*blank’);
+if (w) {
+w.document.write(src);
+w.document.close();
+showIOSModal();
+} else {
+alert(‘אפשר הצגת חלונות קופצים בהגדרות Safari כדי לשמור’);
+}
+} else {
+try {
+var b = new Blob([src], {type:‘text/html;charset=utf-8’});
+var a = ce(‘a’);
+a.href = URL.createObjectURL(b);
+a.download = ’תזרים*’ + (S.title||’’).replace(/\s/g,’_’) + ‘.html’;
+document.body.appendChild(a); a.click();
+setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(a.href);},1000);
+} catch(e) { alert(‘שגיאה בשמירה’); }
+}
 }
 
-function doExport() {
-  if (typeof XLSX === 'undefined') { alert('ספריית האקסל לא נטענה'); return; }
-  var wb = XLSX.utils.book_new();
+function showIOSModal() {
+var ov = dv(‘ov’,null,[
+dv(‘mdl’,null,[
+el(‘h3’,null,null,[‘נפתח לשונית חדשה 🎉’]),
+el(‘p’,null,null,[‘בלשונית החדשה:\n1. לחץ על כפתור השיתוף ⬆️\n2. בחר “Add to Home Screen” או “Save to Files”\n3. הקובץ יישמר עם כל הנתונים שלך’]),
+bt(‘mclose’,null,‘הבנתי’,function(){ov.remove();})
+])
+]);
+document.body.appendChild(ov);
+}
 
-  var fd = [['שם הקרן','מספר חשבון','סכום','ייעוד']];
-  for (var i = 0; i < S.funds.length; i++) {
-    var f = S.funds[i];
-    fd.push([f.name||'', f.num||'', parseFloat(f.amount)||0, f.type==='shanati'?'שנתי':'כללי']);
-  }
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(fd), 'קרנות');
-
-  var gd = [['סוג','קרן','סכום','קטגוריה']];
-  for (var i = 0; i < S.goals.length; i++) {
-    var g = S.goals[i];
-    var fn = '';
-    if (g.type === 'shanati') { var fobj = getFund(g.fundId); fn = fobj ? fobj.name : ''; }
-    gd.push([g.type==='shanati'?'שנתי':'כללי', fn, getGoalAmt(g), g.category||'']);
-  }
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(gd), 'יעדים');
-
-  var ed = [['מטרת הוצאה','סכום','קטגוריה']];
-  var tot = 0;
-  for (var i = 0; i < S.expenses.length; i++) {
-    var e = S.expenses[i];
-    var a = parseFloat(e.amount)||0; tot += a;
-    ed.push([e.purpose||'', a, e.category||'']);
-  }
-  ed.push(['סה"כ', tot, '']);
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ed), 'הוצאות חודשיות');
-
-  var klaliCap = 0, klaliGoalsTotal = 0;
-  for (var i = 0; i < S.funds.length; i++) if (S.funds[i].type==='klali') klaliCap += parseFloat(S.funds[i].amount)||0;
-  for (var i = 0; i < S.goals.length; i++) if (S.goals[i].type==='klali') klaliGoalsTotal += getGoalAmt(S.goals[i]);
-  var sd = [
-    ['סיכום', S.title||''], [],
-    ['הון צבור כללי', klaliCap],
-    ['יעדים כלליים', klaliGoalsTotal],
-    ['לחסכון', klaliCap - klaliGoalsTotal]
-  ];
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sd), 'סיכום');
-
-  try { XLSX.writeFile(wb, 'תזרים_' + (S.title||'').replace(/\s/g,'_') + '.xlsx'); }
-  catch(e) { alert('שגיאה: ' + e.message); }
+/* –– EXPORT XLSX –– */
+function doExport(){
+if(typeof XLSX===‘undefined’){alert(‘ספריית האקסל לא נטענה’);return;}
+var wb=XLSX.utils.book_new();
+var fd=[[‘שם הקרן’,‘מספר חשבון’,‘סכום’,‘ייעוד’]];
+for(var i=0;i<S.funds.length;i++){var f=S.funds[i];fd.push([f.name||’’,f.num||’’,parseFloat(f.amount)||0,f.type===‘shanati’?‘שנתי’:‘כללי’]);}
+XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(fd),‘קרנות’);
+var gd=[[‘סוג’,‘קרן’,‘סכום’,‘קטגוריה’]];
+for(var i=0;i<S.goals.length;i++){var g=S.goals[i];var fn=’’;if(g.type===‘shanati’){var fo=getFund(g.fundId);fn=fo?fo.name:’’;}gd.push([g.type===‘shanati’?‘שנתי’:‘כללי’,fn,getGoalAmt(g),g.category||’’]);}
+XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(gd),‘יעדים’);
+var ed=[[‘מטרת הוצאה’,‘סכום’,‘קטגוריה’]]; var tot=0;
+for(var i=0;i<S.expenses.length;i++){var e=S.expenses[i];var a=parseFloat(e.amount)||0;tot+=a;ed.push([e.purpose||’’,a,e.category||’’]);}
+ed.push([‘סה”כ’,tot,’’]);
+XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ed),‘הוצאות’);
+var klaliCap=0,klaliGoalsTotal=0;
+for(var i=0;i<S.funds.length;i++) if(S.funds[i].type===‘klali’) klaliCap+=parseFloat(S.funds[i].amount)||0;
+for(var i=0;i<S.goals.length;i++) if(S.goals[i].type===‘klali’) klaliGoalsTotal+=getGoalAmt(S.goals[i]);
+var sd=[[‘סיכום’,S.title||’’],[],[‘הון צבור כללי’,klaliCap],[‘יעדים כלליים’,klaliGoalsTotal],[‘לחסכון’,klaliCap-klaliGoalsTotal]];
+XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sd),‘סיכום’);
+try{XLSX.writeFile(wb,‘תזרים_’+(S.title||’’).replace(/\s/g,’_’)+’.xlsx’);}catch(e){alert(’שגיאה: ’+e.message);}
 }
 
 render();
 </script>
+
 </body>
 </html>

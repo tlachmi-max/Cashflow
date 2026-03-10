@@ -40,7 +40,6 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 input[type=number] { -moz-appearance: textfield; }
 
-/* ── Layout Shell ── */
 .app {
 display: flex;
 flex-direction: column;
@@ -49,9 +48,11 @@ height: 100dvh;
 }
 .header {
 flex-shrink: 0;
-padding: 14px 16px;
+padding: 12px 16px;
 background: var(–surface);
 border-bottom: 1px solid var(–border);
+}
+.header-top {
 display: flex;
 align-items: center;
 gap: 12px;
@@ -90,7 +91,80 @@ opacity: 0; cursor: pointer;
 font-size: 0;
 }
 
-/* ── Scrollable Content ── */
+/* ── Month Bar ── */
+.month-bar {
+display: flex;
+align-items: center;
+gap: 8px;
+margin-top: 10px;
+padding: 8px 12px;
+background: var(–bg);
+border: 1px solid var(–border);
+border-radius: 10px;
+}
+.month-bar .cal-icon {
+font-size: 16px;
+color: var(–gold);
+flex-shrink: 0;
+}
+.month-bar select {
+flex: 1;
+padding: 6px 8px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 6px;
+color: var(–text);
+font-family: ‘Heebo’, sans-serif;
+font-size: 14px;
+font-weight: 500;
+direction: rtl;
+outline: none;
+-webkit-appearance: none;
+appearance: none;
+}
+.month-bar select:focus { border-color: var(–gold); }
+.month-bar input[type=number] {
+width: 72px;
+padding: 6px 8px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 6px;
+color: var(–text);
+font-family: ‘Heebo’, sans-serif;
+font-size: 14px;
+font-weight: 500;
+text-align: center;
+outline: none;
+direction: ltr;
+}
+.month-bar input:focus { border-color: var(–gold); }
+
+/* ── Report Buttons ── */
+.report-bar {
+display: flex;
+gap: 8px;
+margin-top: 8px;
+}
+.report-btn {
+flex: 1;
+padding: 9px 10px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 8px;
+color: var(–text2);
+font-family: ‘Heebo’, sans-serif;
+font-size: 12px;
+font-weight: 500;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 5px;
+transition: all 0.15s;
+}
+.report-btn:active { background: var(–border); color: var(–text); }
+.report-btn .ri { font-size: 14px; }
+
 .content {
 flex: 1;
 overflow-y: auto;
@@ -100,7 +174,6 @@ padding: 16px 14px;
 padding-bottom: 80px;
 }
 
-/* ── Bottom Tab Bar ── */
 .tab-bar {
 flex-shrink: 0;
 display: flex;
@@ -135,7 +208,6 @@ border-radius: 0 0 2px 2px;
 .tab-btn .icon { font-size: 18px; }
 .tab-btn .label { font-size: 10px; font-weight: 500; }
 
-/* ── Section Title ── */
 .section-head {
 display: flex;
 align-items: center;
@@ -145,9 +217,7 @@ margin-bottom: 14px;
 .section-head .ico { font-size: 18px; color: var(–gold); }
 .section-head h2 { font-size: 16px; font-weight: 600; }
 
-/* ── Card Table (Mobile-First) ── */
 .card-list { display: flex; flex-direction: column; gap: 8px; }
-
 .card {
 background: var(–surface);
 border: 1px solid var(–border);
@@ -157,7 +227,6 @@ position: relative;
 transition: border-color 0.2s;
 }
 .card:focus-within { border-color: var(–gold); }
-
 .card-row {
 display: flex;
 gap: 8px;
@@ -165,11 +234,7 @@ margin-bottom: 8px;
 flex-wrap: wrap;
 }
 .card-row:last-child { margin-bottom: 0; }
-
-.field {
-flex: 1;
-min-width: 0;
-}
+.field { flex: 1; min-width: 0; }
 .field.full { flex-basis: 100%; }
 .field label {
 display: block;
@@ -193,12 +258,9 @@ outline: none;
 transition: border-color 0.15s;
 }
 .field input:focus,
-.field select:focus {
-border-color: var(–gold);
-}
+.field select:focus { border-color: var(–gold); }
 .field input::placeholder { color: var(–text3); }
 .field select { -webkit-appearance: none; appearance: none; }
-
 .card-delete {
 position: absolute;
 top: 8px;
@@ -214,7 +276,6 @@ display: flex; align-items: center; justify-content: center;
 }
 .card-delete:active { background: var(–border); color: var(–red); }
 
-/* ── Add Button ── */
 .add-btn {
 display: flex;
 align-items: center;
@@ -234,7 +295,6 @@ cursor: pointer;
 }
 .add-btn:active { background: var(–surface); }
 
-/* ── Total Bar ── */
 .total-bar {
 display: flex;
 justify-content: space-between;
@@ -248,7 +308,6 @@ border: 1px solid var(–border);
 .total-bar .lbl { font-size: 13px; font-weight: 600; color: var(–text2); }
 .total-bar .val { font-size: 20px; font-weight: 700; color: var(–gold); }
 
-/* ── Category Summary ── */
 .cat-section { margin-top: 24px; }
 .cat-section h3 { font-size: 14px; color: var(–text2); font-weight: 600; margin-bottom: 12px; }
 .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -264,7 +323,6 @@ padding: 12px;
 .cat-card .bar-fill { height: 100%; background: linear-gradient(90deg, var(–gold), var(–gold2)); border-radius: 2px; transition: width 0.4s; }
 .cat-card .pct { font-size: 11px; color: var(–text3); margin-top: 4px; text-align: left; }
 
-/* ── Summary Tab ── */
 .summary-stack {
 display: flex;
 flex-direction: column;
@@ -282,9 +340,7 @@ text-align: center;
 .summary-card .ico { font-size: 22px; color: var(–gold); margin-bottom: 6px; }
 .summary-card .lbl { font-size: 13px; color: var(–text2); margin-bottom: 4px; }
 .summary-card .amt { font-size: 24px; font-weight: 700; }
-.summary-divider {
-text-align: center;
-}
+.summary-divider { text-align: center; }
 .summary-op {
 display: inline-flex;
 width: 32px; height: 32px;
@@ -296,12 +352,9 @@ color: var(–text2);
 font-size: 16px;
 font-weight: 700;
 }
-.summary-card.result {
-border-width: 2px;
-}
+.summary-card.result { border-width: 2px; }
 .summary-card .sub { font-size: 12px; margin-top: 4px; }
 
-/* ── Toast ── */
 .toast {
 position: fixed;
 bottom: 80px;
@@ -327,18 +380,23 @@ white-space: nowrap;
 <div class="app" id="app"></div>
 
 <script>
-// ── State ──
-const CATEGORIES = ["דיור","חינוך","בריאות","תחבורה","מזון","בילויים","ביגוד","חשבונות","ביטוח","אחר"];
-const TABS = [
+var BASE_CATEGORIES = ["דיור","חינוך","בריאות","תחבורה","מזון","בילויים","ביגוד","חשבונות","ביטוח","אחר"];
+var customCategories = [];
+function getAllCategories(){ return BASE_CATEGORIES.concat(customCategories); }
+var TABS = [
   {id:"equity",label:"הון עצמי",icon:"◆"},
   {id:"savings",label:"חסכונות",icon:"◎"},
   {id:"planned",label:"הוצאות מתוכננות",icon:"▤"},
   {id:"monthly",label:"תזרים חודשי",icon:"◷"},
   {id:"summary",label:"סיכום",icon:"Σ"}
 ];
+var HEB_MONTHS = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
 
-let state = {
+var now = new Date();
+var state = {
   tab: "equity",
+  month: now.getMonth(),
+  year: now.getFullYear(),
   equity: [mkEquity()],
   savings: [mkSavings()],
   planned: [mkPlanned()],
@@ -356,35 +414,52 @@ function fmt(v){
   if(isNaN(n)) return "₪0";
   return "₪" + n.toLocaleString("he-IL");
 }
+function getMonthLabel(){ return HEB_MONTHS[state.month] + " " + state.year; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 // ── Render ──
 function render(){
   var app = document.getElementById("app");
   var t = state.tab;
   var ct = TABS.find(function(x){ return x.id === t; });
-
   var html = '';
 
   // Header
   html += '<div class="header">';
+  html += '<div class="header-top">';
   html += '<div class="logo">₪</div>';
   html += '<div><h1>ניהול תזרים</h1><p>מעקב הון, חסכונות והוצאות</p></div>';
   html += '<div class="header-actions">';
   html += '<button class="icon-btn" onclick="exportExcel()" title="ייצוא לאקסל">⬇</button>';
   html += '<label class="icon-btn" title="ייבוא מאקסל">⬆<input type="file" accept=".xlsx,.xls" onchange="importExcel(event)"></label>';
+  html += '</div></div>';
+
+  // Month selector
+  html += '<div class="month-bar">';
+  html += '<span class="cal-icon">📅</span>';
+  html += '<select onchange="setMonth(this.value)">';
+  for(var m = 0; m < 12; m++){
+    html += '<option value="' + m + '"' + (state.month === m ? ' selected' : '') + '>' + HEB_MONTHS[m] + '</option>';
+  }
+  html += '</select>';
+  html += '<input type="number" value="' + state.year + '" min="2020" max="2040" onchange="setYear(this.value)" inputmode="numeric">';
+  html += '</div>';
+
+  // Report export buttons
+  html += '<div class="report-bar">';
+  html += '<button class="report-btn" onclick="exportMonthlyReportExcel()"><span class="ri">📊</span>דוח חודשי Excel</button>';
+  html += '<button class="report-btn" onclick="exportMonthlyReportHTML()"><span class="ri">📄</span>דוח חודשי HTML</button>';
   html += '</div>';
   html += '</div>';
 
   // Content
   html += '<div class="content">';
   html += '<div class="section-head"><span class="ico">' + ct.icon + '</span><h2>' + ct.label + '</h2></div>';
-
   if(t === "equity") html += renderEquity();
   else if(t === "savings") html += renderSavings();
   else if(t === "planned") html += renderPlanned();
   else if(t === "monthly") html += renderMonthly();
   else if(t === "summary") html += renderSummary();
-
   html += '</div>';
 
   // Tab bar
@@ -396,346 +471,387 @@ function render(){
     html += '</button>';
   });
   html += '</div>';
-
   app.innerHTML = html;
 }
 
 function switchTab(id){ state.tab = id; render(); }
+function setMonth(v){ state.month = parseInt(v); render(); }
+function setYear(v){ var y = parseInt(v); if(y >= 2020 && y <= 2040) state.year = y; }
 
-// ── Equity ──
 function renderEquity(){
   var h = '<div class="card-list">';
   state.equity.forEach(function(r,i){
-    h += '<div class="card">';
-    h += '<button class="card-delete" onclick="delRow(\'equity\','+i+')">✕</button>';
-    h += '<div class="card-row">';
-    h += field("שם", "text", r.name, "equity", i, "name", "שם המקור");
-    h += field("מספר", "text", r.number, "equity", i, "number", "מספר חשבון");
-    h += '</div>';
-    h += '<div class="card-row">';
-    h += field("ערך", "number", r.value, "equity", i, "value", "0");
-    h += field("הערות", "text", r.notes, "equity", i, "notes", "הערות");
-    h += '</div>';
-    h += '</div>';
+    h += '<div class="card"><button class="card-delete" onclick="delRow(\'equity\','+i+')">✕</button>';
+    h += '<div class="card-row">' + field("שם","text",r.name,"equity",i,"name","שם המקור") + field("מספר","text",r.number,"equity",i,"number","מספר חשבון") + '</div>';
+    h += '<div class="card-row">' + field("ערך","number",r.value,"equity",i,"value","0") + field("הערות","text",r.notes,"equity",i,"notes","הערות") + '</div></div>';
   });
   h += '</div>';
-  var total = state.equity.reduce(function(s,r){ return s + (parseFloat(r.value)||0); }, 0);
-  h += '<div class="total-bar"><span class="lbl">סך הכל הון עצמי</span><span class="val">' + fmt(total) + '</span></div>';
+  var total = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
+  h += '<div class="total-bar"><span class="lbl">סך הכל הון עצמי</span><span class="val">'+fmt(total)+'</span></div>';
   h += '<button class="add-btn" onclick="addRow(\'equity\')">+ הוסף מקור</button>';
   return h;
 }
 
-// ── Savings ──
 function renderSavings(){
   var h = '<div class="card-list">';
   state.savings.forEach(function(r,i){
-    h += '<div class="card">';
-    h += '<button class="card-delete" onclick="delRow(\'savings\','+i+')">✕</button>';
-    h += '<div class="card-row">';
-    h += field("שם", "text", r.name, "savings", i, "name", "שם החיסכון");
-    h += field("מספר", "text", r.number, "savings", i, "number", "מספר");
-    h += '</div>';
-    h += '<div class="card-row">';
-    h += field("ערך", "number", r.value, "savings", i, "value", "0");
-    h += field("יעד", "text", r.target, "savings", i, "target", "יעד");
-    h += '</div>';
-    h += '<div class="card-row">';
-    h += field("הערות", "text", r.notes, "savings", i, "notes", "הערות", true);
-    h += '</div>';
-    h += '</div>';
+    h += '<div class="card"><button class="card-delete" onclick="delRow(\'savings\','+i+')">✕</button>';
+    h += '<div class="card-row">' + field("שם","text",r.name,"savings",i,"name","שם החיסכון") + field("מספר","text",r.number,"savings",i,"number","מספר") + '</div>';
+    h += '<div class="card-row">' + field("ערך","number",r.value,"savings",i,"value","0") + field("יעד","text",r.target,"savings",i,"target","יעד") + '</div>';
+    h += '<div class="card-row">' + field("הערות","text",r.notes,"savings",i,"notes","הערות",true) + '</div></div>';
   });
   h += '</div>';
-  var total = state.savings.reduce(function(s,r){ return s + (parseFloat(r.value)||0); }, 0);
-  h += '<div class="total-bar"><span class="lbl">סך חסכונות יעודיים</span><span class="val">' + fmt(total) + '</span></div>';
+  var total = state.savings.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
+  h += '<div class="total-bar"><span class="lbl">סך חסכונות יעודיים</span><span class="val">'+fmt(total)+'</span></div>';
   h += '<button class="add-btn" onclick="addRow(\'savings\')">+ הוסף חיסכון</button>';
   return h;
 }
 
-// ── Planned ──
 function renderPlanned(){
   var h = '<div class="card-list">';
   state.planned.forEach(function(r,i){
-    h += '<div class="card">';
-    h += '<button class="card-delete" onclick="delRow(\'planned\','+i+')">✕</button>';
-    h += '<div class="card-row">';
-    h += field("הוצאה", "text", r.expense, "planned", i, "expense", "שם ההוצאה");
-    h += field("סכום", "number", r.amount, "planned", i, "amount", "0");
-    h += '</div>';
-    h += '<div class="card-row">';
-    h += selectField("קטגוריה", r.category, "planned", i, "category");
-    h += field("הערות", "text", r.notes, "planned", i, "notes", "הערות");
-    h += '</div>';
-    h += '</div>';
+    h += '<div class="card"><button class="card-delete" onclick="delRow(\'planned\','+i+')">✕</button>';
+    h += '<div class="card-row">' + field("הוצאה","text",r.expense,"planned",i,"expense","שם ההוצאה") + field("סכום","number",r.amount,"planned",i,"amount","0") + '</div>';
+    h += '<div class="card-row">' + selectField("קטגוריה",r.category,"planned",i,"category") + field("הערות","text",r.notes,"planned",i,"notes","הערות") + '</div></div>';
   });
   h += '</div>';
-  var total = state.planned.reduce(function(s,r){ return s + (parseFloat(r.amount)||0); }, 0);
-  h += '<div class="total-bar"><span class="lbl">סך הוצאות מתוכננות</span><span class="val">' + fmt(total) + '</span></div>';
+  var total = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
+  h += '<div class="total-bar"><span class="lbl">סך הוצאות מתוכננות</span><span class="val">'+fmt(total)+'</span></div>';
   h += '<button class="add-btn" onclick="addRow(\'planned\')">+ הוסף הוצאה</button>';
-
-  // Category summary
   var cats = {};
-  state.planned.forEach(function(r){
-    if(r.category && r.amount){
-      cats[r.category] = (cats[r.category]||0) + (parseFloat(r.amount)||0);
-    }
-  });
-  var catKeys = Object.keys(cats);
-  if(catKeys.length > 0){
-    catKeys.sort(function(a,b){ return cats[b]-cats[a]; });
+  state.planned.forEach(function(r){ if(r.category && r.amount) cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0); });
+  var ck = Object.keys(cats);
+  if(ck.length){
+    ck.sort(function(a,b){ return cats[b]-cats[a]; });
     h += '<div class="cat-section"><h3>סיכום לפי קטגוריות</h3><div class="cat-grid">';
-    catKeys.forEach(function(c){
-      var pct = total > 0 ? (cats[c]/total*100) : 0;
-      h += '<div class="cat-card">';
-      h += '<div class="name">' + c + '</div>';
-      h += '<div class="amt">' + fmt(cats[c]) + '</div>';
-      h += '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>';
-      h += '<div class="pct">' + pct.toFixed(1) + '%</div>';
-      h += '</div>';
+    ck.forEach(function(c){
+      var pct = total>0?(cats[c]/total*100):0;
+      h += '<div class="cat-card"><div class="name">'+c+'</div><div class="amt">'+fmt(cats[c])+'</div>';
+      h += '<div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%"></div></div><div class="pct">'+pct.toFixed(1)+'%</div></div>';
     });
     h += '</div></div>';
   }
   return h;
 }
 
-// ── Monthly ──
 function renderMonthly(){
   var h = '<div class="card-list">';
   state.monthly.forEach(function(r,i){
-    h += '<div class="card">';
-    h += '<button class="card-delete" onclick="delRow(\'monthly\','+i+')">✕</button>';
-    h += '<div class="card-row">';
-    h += field("הוצאה", "text", r.expense, "monthly", i, "expense", "שם ההוצאה");
-    h += field("סכום", "number", r.amount, "monthly", i, "amount", "0");
-    h += '</div>';
-    h += '<div class="card-row">';
-    h += field("הערות", "text", r.notes, "monthly", i, "notes", "הערות", true);
-    h += '</div>';
-    h += '</div>';
+    h += '<div class="card"><button class="card-delete" onclick="delRow(\'monthly\','+i+')">✕</button>';
+    h += '<div class="card-row">' + field("הוצאה","text",r.expense,"monthly",i,"expense","שם ההוצאה") + field("סכום","number",r.amount,"monthly",i,"amount","0") + '</div>';
+    h += '<div class="card-row">' + field("הערות","text",r.notes,"monthly",i,"notes","הערות",true) + '</div></div>';
   });
   h += '</div>';
-  var total = state.monthly.reduce(function(s,r){ return s + (parseFloat(r.amount)||0); }, 0);
-  h += '<div class="total-bar"><span class="lbl">סך תזרים חודשי</span><span class="val">' + fmt(total) + '</span></div>';
+  var total = state.monthly.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
+  h += '<div class="total-bar"><span class="lbl">סך תזרים חודשי</span><span class="val">'+fmt(total)+'</span></div>';
   h += '<button class="add-btn" onclick="addRow(\'monthly\')">+ הוסף הוצאה</button>';
   return h;
 }
 
-// ── Summary ──
 function renderSummary(){
-  var tEquity = state.equity.reduce(function(s,r){ return s + (parseFloat(r.value)||0); }, 0);
-  var tPlanned = state.planned.reduce(function(s,r){ return s + (parseFloat(r.amount)||0); }, 0);
-  var net = tEquity - tPlanned;
-  var clr = net >= 0 ? 'var(--green)' : 'var(--red)';
+  var tE = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
+  var tP = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
+  var net = tE - tP;
+  var clr = net>=0?'var(--green)':'var(--red)';
   var h = '<div class="summary-stack">';
-  h += '<div class="summary-card"><div class="ico">◆</div><div class="lbl">סך הון עצמי</div><div class="amt" style="color:var(--green)">' + fmt(tEquity) + '</div></div>';
+  h += '<div class="summary-card"><div class="ico">◆</div><div class="lbl">סך הון עצמי</div><div class="amt" style="color:var(--green)">'+fmt(tE)+'</div></div>';
   h += '<div class="summary-divider"><span class="summary-op">−</span></div>';
-  h += '<div class="summary-card"><div class="ico">▤</div><div class="lbl">סך הוצאות מתוכננות</div><div class="amt" style="color:var(--red)">' + fmt(tPlanned) + '</div></div>';
+  h += '<div class="summary-card"><div class="ico">▤</div><div class="lbl">סך הוצאות מתוכננות</div><div class="amt" style="color:var(--red)">'+fmt(tP)+'</div></div>';
   h += '<div class="summary-divider"><span class="summary-op">=</span></div>';
-  h += '<div class="summary-card result" style="border-color:' + clr + '"><div class="ico">Σ</div><div class="lbl">סך הכל</div><div class="amt" style="font-size:28px;color:' + clr + '">' + fmt(net) + '</div><div class="sub" style="color:' + clr + '">' + (net>=0?'יתרה חיובית':'יתרה שלילית') + '</div></div>';
+  h += '<div class="summary-card result" style="border-color:'+clr+'"><div class="ico">Σ</div><div class="lbl">סך הכל</div><div class="amt" style="font-size:28px;color:'+clr+'">'+fmt(net)+'</div><div class="sub" style="color:'+clr+'">'+(net>=0?'יתרה חיובית':'יתרה שלילית')+'</div></div>';
   h += '</div>';
   return h;
 }
 
-// ── Field Helpers ──
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-function field(label, type, value, tab, idx, key, ph, full){
-  var cls = full ? 'field full' : 'field';
-  return '<div class="' + cls + '"><label>' + label + '</label>' +
-    '<input type="' + type + '" value="' + esc(value) + '" placeholder="' + esc(ph) + '" ' +
-    'oninput="upd(\'' + tab + '\',' + idx + ',\'' + key + '\',this.value)" ' +
-    'inputmode="' + (type==='number'?'decimal':'text') + '"></div>';
+// ── Field helpers ──
+function field(label,type,value,tab,idx,key,ph,full){
+  var cls = full?'field full':'field';
+  return '<div class="'+cls+'"><label>'+label+'</label><input type="'+type+'" value="'+esc(value)+'" placeholder="'+esc(ph)+'" oninput="upd(\''+tab+'\','+idx+',\''+key+'\',this.value)" inputmode="'+(type==='number'?'decimal':'text')+'"></div>';
 }
-
-function selectField(label, value, tab, idx, key){
-  var h = '<div class="field"><label>' + label + '</label><select onchange="upd(\'' + tab + '\',' + idx + ',\'' + key + '\',this.value)">';
+function selectField(label,value,tab,idx,key){
+  var cats = getAllCategories();
+  // If current value is custom and not in list, add it temporarily
+  if(value && cats.indexOf(value)===-1) cats = cats.concat([value]);
+  var h = '<div class="field"><label>'+label+'</label>';
+  h += '<select onchange="handleCatSelect(this,\''+tab+'\','+idx+',\''+key+'\')">';
   h += '<option value="">בחר...</option>';
-  CATEGORIES.forEach(function(c){
-    h += '<option value="' + c + '"' + (value===c?' selected':'') + '>' + c + '</option>';
-  });
+  cats.forEach(function(c){ h += '<option value="'+c+'"'+(value===c?' selected':'')+'>'+c+'</option>'; });
+  h += '<option value="__new__">+ קטגוריה חדשה...</option>';
   h += '</select></div>';
   return h;
 }
-
-// ── Data Ops ──
-function upd(tab, idx, key, val){
-  state[tab][idx][key] = val;
-  // Update totals only, don't re-render (keeps focus)
-  updateTotals();
+function handleCatSelect(el,tab,idx,key){
+  if(el.value === '__new__'){
+    // Replace select with text input
+    var parent = el.parentNode;
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = 'הזן שם קטגוריה...';
+    inp.style.cssText = 'width:100%;padding:9px 10px;background:var(--bg);border:1.5px solid var(--gold);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:14px;direction:rtl;outline:none;';
+    parent.replaceChild(inp, el);
+    inp.focus();
+    inp.addEventListener('blur', function(){
+      var val = inp.value.trim();
+      if(val){
+        // Add to custom categories if not already there
+        var all = getAllCategories();
+        if(all.indexOf(val)===-1) customCategories.push(val);
+        state[tab][idx][key] = val;
+      } else {
+        state[tab][idx][key] = '';
+      }
+      render();
+    });
+    inp.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') inp.blur();
+    });
+  } else {
+    state[tab][idx][key] = el.value;
+  }
 }
 
-function updateTotals(){
-  // Lightweight update of total bars
-  var totalBars = document.querySelectorAll('.total-bar .val');
-  // We just let it be — full re-render on add/delete
-}
-
+function upd(tab,idx,key,val){ state[tab][idx][key] = val; }
 function addRow(tab){
   if(tab==='equity') state.equity.push(mkEquity());
   else if(tab==='savings') state.savings.push(mkSavings());
   else if(tab==='planned') state.planned.push(mkPlanned());
   else if(tab==='monthly') state.monthly.push(mkMonthly());
   render();
-  // Scroll to bottom
-  setTimeout(function(){ 
-    var c = document.querySelector('.content'); 
-    if(c) c.scrollTop = c.scrollHeight; 
-  }, 50);
+  setTimeout(function(){ var c=document.querySelector('.content'); if(c) c.scrollTop=c.scrollHeight; },50);
 }
-
-function delRow(tab, idx){
-  if(state[tab].length <= 1) return;
-  state[tab].splice(idx, 1);
+function delRow(tab,idx){
+  if(state[tab].length<=1) return;
+  state[tab].splice(idx,1);
   render();
 }
 
-// ── Toast ──
 function toast(msg){
-  var el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = msg;
+  var el=document.createElement('div'); el.className='toast'; el.textContent=msg;
   document.body.appendChild(el);
-  setTimeout(function(){ el.remove(); }, 2100);
+  setTimeout(function(){ el.remove(); },2100);
 }
 
-// ── Excel Export ──
+// ── Helper ──
+function buildReportData(){
+  var tE = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
+  var tS = state.savings.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
+  var tP = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
+  var tM = state.monthly.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
+  var cats = {};
+  state.planned.forEach(function(r){ if(r.category&&r.amount) cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0); });
+  return { label:getMonthLabel(), tE:tE, tS:tS, tP:tP, tM:tM, net:tE-tP, cats:cats };
+}
+
+// ══════════════════════════
+// ── Full Data Excel Export ──
+// ══════════════════════════
 function exportExcel(){
   var wb = XLSX.utils.book_new();
+  var ml = getMonthLabel();
 
-  // Equity sheet
-  var eqData = [["שם","מספר","ערך","הערות"]];
-  state.equity.forEach(function(r){ eqData.push([r.name, r.number, parseFloat(r.value)||0, r.notes]); });
-  var ws1 = XLSX.utils.aoa_to_sheet(eqData);
-  ws1['!cols'] = [{wch:20},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb, ws1, "הון עצמי");
+  var d1 = [["דוח תזרים — "+ml],[""],["שם","מספר","ערך","הערות"]];
+  state.equity.forEach(function(r){ d1.push([r.name,r.number,parseFloat(r.value)||0,r.notes]); });
+  var ws1 = XLSX.utils.aoa_to_sheet(d1); ws1['!cols']=[{wch:20},{wch:15},{wch:15},{wch:25}];
+  XLSX.utils.book_append_sheet(wb,ws1,"הון עצמי");
 
-  // Savings sheet
-  var svData = [["שם","מספר","ערך","יעד","הערות"]];
-  state.savings.forEach(function(r){ svData.push([r.name, r.number, parseFloat(r.value)||0, r.target, r.notes]); });
-  var ws2 = XLSX.utils.aoa_to_sheet(svData);
-  ws2['!cols'] = [{wch:20},{wch:15},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb, ws2, "חסכונות יעודיים");
+  var d2 = [["דוח תזרים — "+ml],[""],["שם","מספר","ערך","יעד","הערות"]];
+  state.savings.forEach(function(r){ d2.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]); });
+  var ws2 = XLSX.utils.aoa_to_sheet(d2); ws2['!cols']=[{wch:20},{wch:15},{wch:15},{wch:15},{wch:25}];
+  XLSX.utils.book_append_sheet(wb,ws2,"חסכונות יעודיים");
 
-  // Planned sheet
-  var plData = [["הוצאה","סכום","קטגוריה","הערות"]];
-  state.planned.forEach(function(r){ plData.push([r.expense, parseFloat(r.amount)||0, r.category, r.notes]); });
-  var ws3 = XLSX.utils.aoa_to_sheet(plData);
-  ws3['!cols'] = [{wch:20},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb, ws3, "הוצאות מתוכננות");
+  var d3 = [["דוח תזרים — "+ml],[""],["הוצאה","סכום","קטגוריה","הערות"]];
+  state.planned.forEach(function(r){ d3.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]); });
+  var ws3 = XLSX.utils.aoa_to_sheet(d3); ws3['!cols']=[{wch:20},{wch:15},{wch:15},{wch:25}];
+  XLSX.utils.book_append_sheet(wb,ws3,"הוצאות מתוכננות");
 
-  // Monthly sheet
-  var moData = [["הוצאה","סכום","הערות"]];
-  state.monthly.forEach(function(r){ moData.push([r.expense, parseFloat(r.amount)||0, r.notes]); });
-  var ws4 = XLSX.utils.aoa_to_sheet(moData);
-  ws4['!cols'] = [{wch:20},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb, ws4, "תזרים חודשי");
+  var d4 = [["דוח תזרים — "+ml],[""],["הוצאה","סכום","הערות"]];
+  state.monthly.forEach(function(r){ d4.push([r.expense,parseFloat(r.amount)||0,r.notes]); });
+  var ws4 = XLSX.utils.aoa_to_sheet(d4); ws4['!cols']=[{wch:20},{wch:15},{wch:25}];
+  XLSX.utils.book_append_sheet(wb,ws4,"תזרים חודשי");
 
-  // Summary sheet
-  var tEquity = state.equity.reduce(function(s,r){ return s + (parseFloat(r.value)||0); }, 0);
-  var tPlanned = state.planned.reduce(function(s,r){ return s + (parseFloat(r.amount)||0); }, 0);
-  var suData = [
-    ["","סכום"],
-    ["סך הון עצמי", tEquity],
-    ["סך הוצאות מתוכננות", tPlanned],
-    ["סך הכל", tEquity - tPlanned]
-  ];
-  var ws5 = XLSX.utils.aoa_to_sheet(suData);
-  ws5['!cols'] = [{wch:25},{wch:15}];
-  XLSX.utils.book_append_sheet(wb, ws5, "סיכום");
+  var rd = buildReportData();
+  var d5 = [["דוח תזרים — "+ml],[""],["","סכום"],["סך הון עצמי",rd.tE],["סך הוצאות מתוכננות",rd.tP],["סך הכל",rd.net]];
+  var ws5 = XLSX.utils.aoa_to_sheet(d5); ws5['!cols']=[{wch:25},{wch:15}];
+  XLSX.utils.book_append_sheet(wb,ws5,"סיכום");
 
-  XLSX.writeFile(wb, "תזרים.xlsx");
+  XLSX.writeFile(wb,"תזרים_"+HEB_MONTHS[state.month]+"_"+state.year+".xlsx");
   toast("הקובץ יוצא בהצלחה ✓");
 }
 
+// ══════════════════════════
 // ── Excel Import ──
+// ══════════════════════════
 function importExcel(e){
-  var file = e.target.files[0];
-  if(!file) return;
+  var file = e.target.files[0]; if(!file) return;
   var reader = new FileReader();
   reader.onload = function(ev){
     try {
-      var wb = XLSX.read(ev.target.result, {type:'array'});
+      var wb = XLSX.read(ev.target.result,{type:'array'});
       var names = wb.SheetNames;
 
-      // Equity
-      var eqSheet = findSheet(wb, names, ["הון עצמי","equity"]);
-      if(eqSheet){
-        var eqRows = XLSX.utils.sheet_to_json(eqSheet, {header:1});
-        if(eqRows.length > 1){
-          state.equity = [];
-          for(var i=1; i<eqRows.length; i++){
-            var r = eqRows[i];
-            if(!r || (!r[0] && !r[1] && !r[2])) continue;
-            state.equity.push({id:uid(), name:String(r[0]||''), number:String(r[1]||''), value:String(r[2]||''), notes:String(r[3]||'')});
-          }
-          if(!state.equity.length) state.equity.push(mkEquity());
-        }
-      }
+      var eqS = findSheet(wb,names,["הון עצמי","equity"]);
+      if(eqS){ var rows=XLSX.utils.sheet_to_json(eqS,{header:1}); var sr=findDataStart(rows,["שם","מספר","ערך"]);
+        if(sr>=0){ state.equity=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]&&!r[2]))continue; state.equity.push({id:uid(),name:String(r[0]||''),number:String(r[1]||''),value:String(r[2]||''),notes:String(r[3]||'')}); } if(!state.equity.length) state.equity.push(mkEquity()); } }
 
-      // Savings
-      var svSheet = findSheet(wb, names, ["חסכונות יעודיים","חסכונות","savings"]);
-      if(svSheet){
-        var svRows = XLSX.utils.sheet_to_json(svSheet, {header:1});
-        if(svRows.length > 1){
-          state.savings = [];
-          for(var i=1; i<svRows.length; i++){
-            var r = svRows[i];
-            if(!r || (!r[0] && !r[1] && !r[2])) continue;
-            state.savings.push({id:uid(), name:String(r[0]||''), number:String(r[1]||''), value:String(r[2]||''), target:String(r[3]||''), notes:String(r[4]||'')});
-          }
-          if(!state.savings.length) state.savings.push(mkSavings());
-        }
-      }
+      var svS = findSheet(wb,names,["חסכונות יעודיים","חסכונות","savings"]);
+      if(svS){ var rows=XLSX.utils.sheet_to_json(svS,{header:1}); var sr=findDataStart(rows,["שם","מספר","ערך"]);
+        if(sr>=0){ state.savings=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]&&!r[2]))continue; state.savings.push({id:uid(),name:String(r[0]||''),number:String(r[1]||''),value:String(r[2]||''),target:String(r[3]||''),notes:String(r[4]||'')}); } if(!state.savings.length) state.savings.push(mkSavings()); } }
 
-      // Planned
-      var plSheet = findSheet(wb, names, ["הוצאות מתוכננות","planned"]);
-      if(plSheet){
-        var plRows = XLSX.utils.sheet_to_json(plSheet, {header:1});
-        if(plRows.length > 1){
-          state.planned = [];
-          for(var i=1; i<plRows.length; i++){
-            var r = plRows[i];
-            if(!r || (!r[0] && !r[1])) continue;
-            state.planned.push({id:uid(), expense:String(r[0]||''), amount:String(r[1]||''), category:String(r[2]||''), notes:String(r[3]||'')});
-          }
-          if(!state.planned.length) state.planned.push(mkPlanned());
-        }
-      }
+      var plS = findSheet(wb,names,["הוצאות מתוכננות","planned"]);
+      if(plS){ var rows=XLSX.utils.sheet_to_json(plS,{header:1}); var sr=findDataStart(rows,["הוצאה","סכום"]);
+        if(sr>=0){ state.planned=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]))continue; state.planned.push({id:uid(),expense:String(r[0]||''),amount:String(r[1]||''),category:String(r[2]||''),notes:String(r[3]||'')}); } if(!state.planned.length) state.planned.push(mkPlanned()); } }
 
-      // Monthly
-      var moSheet = findSheet(wb, names, ["תזרים חודשי","monthly"]);
-      if(moSheet){
-        var moRows = XLSX.utils.sheet_to_json(moSheet, {header:1});
-        if(moRows.length > 1){
-          state.monthly = [];
-          for(var i=1; i<moRows.length; i++){
-            var r = moRows[i];
-            if(!r || (!r[0] && !r[1])) continue;
-            state.monthly.push({id:uid(), expense:String(r[0]||''), amount:String(r[1]||''), notes:String(r[2]||'')});
-          }
-          if(!state.monthly.length) state.monthly.push(mkMonthly());
-        }
-      }
+      var moS = findSheet(wb,names,["תזרים חודשי","monthly"]);
+      if(moS){ var rows=XLSX.utils.sheet_to_json(moS,{header:1}); var sr=findDataStart(rows,["הוצאה","סכום"]);
+        if(sr>=0){ state.monthly=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]))continue; state.monthly.push({id:uid(),expense:String(r[0]||''),amount:String(r[1]||''),notes:String(r[2]||'')}); } if(!state.monthly.length) state.monthly.push(mkMonthly()); } }
 
+      syncCustomCategories();
       render();
       toast("הקובץ יובא בהצלחה ✓");
-    } catch(err){
-      toast("שגיאה בייבוא הקובץ");
-      console.error(err);
-    }
+    } catch(err){ toast("שגיאה בייבוא הקובץ"); console.error(err); }
   };
   reader.readAsArrayBuffer(file);
   e.target.value = '';
 }
 
-function findSheet(wb, names, keywords){
-  for(var n=0; n<names.length; n++){
-    for(var k=0; k<keywords.length; k++){
-      if(names[n].indexOf(keywords[k]) !== -1){
-        return wb.Sheets[names[n]];
-      }
+function syncCustomCategories(){
+  var base = BASE_CATEGORIES;
+  state.planned.forEach(function(r){
+    if(r.category && base.indexOf(r.category)===-1 && customCategories.indexOf(r.category)===-1){
+      customCategories.push(r.category);
     }
-  }
+  });
+}
+
+function findSheet(wb,names,kw){
+  for(var n=0;n<names.length;n++) for(var k=0;k<kw.length;k++) if(names[n].indexOf(kw[k])!==-1) return wb.Sheets[names[n]];
   return null;
+}
+function findDataStart(rows,hdr){
+  for(var i=0;i<rows.length;i++){ if(!rows[i])continue; var ok=true;
+    for(var k=0;k<hdr.length;k++) if(String(rows[i][k]||'')!==hdr[k]){ok=false;break;}
+    if(ok) return i;
+  } return 0;
+}
+
+// ══════════════════════════════════
+// ── Monthly Report — Excel ──
+// ══════════════════════════════════
+function exportMonthlyReportExcel(){
+  var rd = buildReportData();
+  var wb = XLSX.utils.book_new();
+  var d = [];
+  d.push(["דוח חודשי — "+rd.label]); d.push([""]);
+  d.push(["סיכום"]); d.push(["סך הון עצמי",rd.tE]); d.push(["סך חסכונות יעודיים",rd.tS]);
+  d.push(["סך הוצאות מתוכננות",rd.tP]); d.push(["סך תזרים חודשי",rd.tM]);
+  d.push(["יתרה (הון − הוצאות מתוכננות)",rd.net]); d.push([""]);
+
+  d.push(["◆ הון עצמי"]); d.push(["שם","מספר","ערך","הערות"]);
+  state.equity.forEach(function(r){ if(r.name||r.value) d.push([r.name,r.number,parseFloat(r.value)||0,r.notes]); });
+  d.push([""]);
+
+  d.push(["◎ חסכונות יעודיים"]); d.push(["שם","מספר","ערך","יעד","הערות"]);
+  state.savings.forEach(function(r){ if(r.name||r.value) d.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]); });
+  d.push([""]);
+
+  d.push(["▤ הוצאות מתוכננות"]); d.push(["הוצאה","סכום","קטגוריה","הערות"]);
+  state.planned.forEach(function(r){ if(r.expense||r.amount) d.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]); });
+  d.push([""]);
+
+  var ck=Object.keys(rd.cats);
+  if(ck.length){ ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
+    d.push(["סיכום לפי קטגוריות"]); d.push(["קטגוריה","סכום"]);
+    ck.forEach(function(c){ d.push([c,rd.cats[c]]); }); d.push([""]);
+  }
+
+  d.push(["◷ תזרים חודשי"]); d.push(["הוצאה","סכום","הערות"]);
+  state.monthly.forEach(function(r){ if(r.expense||r.amount) d.push([r.expense,parseFloat(r.amount)||0,r.notes]); });
+
+  var ws=XLSX.utils.aoa_to_sheet(d); ws['!cols']=[{wch:30},{wch:15},{wch:15},{wch:15},{wch:25}];
+  XLSX.utils.book_append_sheet(wb,ws,"דוח חודשי");
+  XLSX.writeFile(wb,"דוח_"+HEB_MONTHS[state.month]+"_"+state.year+".xlsx");
+  toast("דוח חודשי Excel יוצא ✓");
+}
+
+// ══════════════════════════════════
+// ── Monthly Report — HTML ──
+// ══════════════════════════════════
+function exportMonthlyReportHTML(){
+  var rd = buildReportData();
+  var h = '<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
+  h += '<title>דוח חודשי — '+esc(rd.label)+'</title>';
+  h += '<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700&display=swap" rel="stylesheet">';
+  h += '<style>';
+  h += 'body{font-family:"Heebo",sans-serif;background:#131210;color:#e8e6e1;padding:20px 16px;direction:rtl;margin:0;max-width:700px;margin:0 auto}';
+  h += 'h1{font-size:20px;color:#c9a84c;margin-bottom:4px}';
+  h += '.sub{color:#8a8780;font-size:13px;margin-bottom:24px}';
+  h += '.section{margin-bottom:24px}';
+  h += '.section h2{font-size:15px;color:#c9a84c;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #2e2d28}';
+  h += 'table{width:100%;border-collapse:collapse;margin-bottom:8px}';
+  h += 'th{text-align:right;padding:8px 10px;font-size:12px;color:#8a8780;background:#1e1d18;border-bottom:1px solid #2e2d28}';
+  h += 'td{padding:8px 10px;font-size:14px;border-bottom:1px solid #1e1d18}';
+  h += '.sr{display:flex;justify-content:space-between;padding:10px 14px;background:#1e1d18;border-radius:8px;margin-bottom:6px}';
+  h += '.sr .l{color:#8a8780;font-size:13px}.sr .v{font-weight:700;font-size:16px}';
+  h += '.grn{color:#7ecba1}.rd{color:#e8927c}.gld{color:#c9a84c}';
+  h += '.nb{text-align:center;padding:20px;background:#1e1d18;border-radius:12px;margin-top:16px}';
+  h += '.nb .l{color:#8a8780;font-size:14px;margin-bottom:4px}.nb .v{font-size:28px;font-weight:700}';
+  h += '.pb{display:block;margin:24px auto 0;padding:12px 32px;background:#c9a84c;color:#131210;border:none;border-radius:8px;font-family:"Heebo";font-size:14px;font-weight:600;cursor:pointer}';
+  h += '@media print{.pb{display:none}body{background:#fff;color:#222;max-width:100%}th{background:#f5f5f5;color:#555}td{border-color:#eee}.sr{background:#f5f5f5}.nb{background:#f5f5f5}.grn{color:#2a8a52}.rd{color:#c44}.gld{color:#8a6d1b}}';
+  h += '</style></head><body>';
+
+h += ‘<h1>📊 דוח חודשי — ‘+esc(rd.label)+’</h1><div class="sub">הופק מאפליקציית ניהול תזרים</div>’;
+
+h += ‘<div class="section">’;
+h += ‘<div class="sr"><span class="l">סך הון עצמי</span><span class="v grn">’+fmt(rd.tE)+’</span></div>’;
+h += ‘<div class="sr"><span class="l">סך חסכונות יעודיים</span><span class="v gld">’+fmt(rd.tS)+’</span></div>’;
+h += ‘<div class="sr"><span class="l">סך הוצאות מתוכננות</span><span class="v rd">’+fmt(rd.tP)+’</span></div>’;
+h += ‘<div class="sr"><span class="l">סך תזרים חודשי</span><span class="v rd">’+fmt(rd.tM)+’</span></div>’;
+var nc = rd.net>=0?‘grn’:‘rd’;
+h += ‘<div class="nb"><div class="l">יתרה (הון עצמי − הוצאות מתוכננות)</div><div class="v '+nc+'">’+fmt(rd.net)+’</div></div></div>’;
+
+// Tables
+h += ‘<div class="section"><h2>◆ הון עצמי</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>הערות</th></tr>’;
+state.equity.forEach(function(r){ if(r.name||r.value) h+=’<tr><td>’+esc(r.name)+’</td><td>’+esc(r.number)+’</td><td>’+fmt(r.value)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
+h += ‘</table></div>’;
+
+h += ‘<div class="section"><h2>◎ חסכונות יעודיים</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>יעד</th><th>הערות</th></tr>’;
+state.savings.forEach(function(r){ if(r.name||r.value) h+=’<tr><td>’+esc(r.name)+’</td><td>’+esc(r.number)+’</td><td>’+fmt(r.value)+’</td><td>’+esc(r.target)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
+h += ‘</table></div>’;
+
+h += ‘<div class="section"><h2>▤ הוצאות מתוכננות</h2><table><tr><th>הוצאה</th><th>סכום</th><th>קטגוריה</th><th>הערות</th></tr>’;
+state.planned.forEach(function(r){ if(r.expense||r.amount) h+=’<tr><td>’+esc(r.expense)+’</td><td>’+fmt(r.amount)+’</td><td>’+esc(r.category)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
+h += ‘</table></div>’;
+
+var ck=Object.keys(rd.cats);
+if(ck.length){ ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
+h+=’<div class="section"><h2>סיכום לפי קטגוריות</h2><table><tr><th>קטגוריה</th><th>סכום</th><th>אחוז</th></tr>’;
+ck.forEach(function(c){ var p=rd.tP>0?(rd.cats[c]/rd.tP*100).toFixed(1):‘0’; h+=’<tr><td>’+esc(c)+’</td><td>’+fmt(rd.cats[c])+’</td><td>’+p+’%</td></tr>’; });
+h+=’</table></div>’;
+}
+
+h += ‘<div class="section"><h2>◷ תזרים חודשי</h2><table><tr><th>הוצאה</th><th>סכום</th><th>הערות</th></tr>’;
+state.monthly.forEach(function(r){ if(r.expense||r.amount) h+=’<tr><td>’+esc(r.expense)+’</td><td>’+fmt(r.amount)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
+h += ‘</table></div>’;
+
+h += ‘<button class="pb" onclick="window.print()">🖨️ הדפסה</button>’;
+h += ‘</body></html>’;
+
+// iOS-friendly: open in new tab so user can share/save
+var blob = new Blob([h], {type:‘text/html;charset=utf-8’});
+var url = URL.createObjectURL(blob);
+
+// Try download first, fallback to new tab (iOS Safari)
+var a = document.createElement(‘a’);
+a.href = url;
+a.download = ‘דוח_’+HEB_MONTHS[state.month]+’_’+state.year+’.html’;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+// Also open in new tab for iOS where download may not work
+setTimeout(function(){ window.open(url,’_blank’); }, 300);
+
+toast(“דוח חודשי HTML יוצא ✓”);
 }
 
 // ── Init ──

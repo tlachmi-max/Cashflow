@@ -10,852 +10,456 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --bg: #131210;
-  --surface: #1e1d18;
-  --surface2: #26251f;
-  --border: #2e2d28;
-  --text: #e8e6e1;
-  --text2: #8a8780;
-  --text3: #5a5850;
-  --gold: #c9a84c;
-  --gold2: #a68932;
-  --green: #7ecba1;
-  --red: #e8927c;
-  --radius: 10px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { 
-  height: 100%; 
-  overflow: hidden;
-  font-family: 'Heebo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  direction: rtl;
-  -webkit-font-smoothing: antialiased;
-}
-::-webkit-scrollbar { width: 0; height: 0; }
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-input[type=number] { -moz-appearance: textfield; }
-
-.app {
-display: flex;
-flex-direction: column;
-height: 100%;
-height: 100dvh;
-}
-.header {
-flex-shrink: 0;
-padding: 12px 16px;
-background: var(–surface);
-border-bottom: 1px solid var(–border);
-}
-.header-top {
-display: flex;
-align-items: center;
-gap: 12px;
-}
-.logo {
-width: 38px; height: 38px;
-border-radius: 10px;
-background: linear-gradient(135deg, var(–gold), var(–gold2));
-display: flex; align-items: center; justify-content: center;
-font-size: 20px; font-weight: 700; color: var(–bg);
-flex-shrink: 0;
-}
-.header h1 { font-size: 17px; font-weight: 700; line-height: 1.2; }
-.header p { font-size: 12px; color: var(–text2); }
-.header-actions {
-margin-right: auto;
-display: flex; gap: 6px;
-}
-.icon-btn {
-width: 36px; height: 36px;
-border: 1px solid var(–border);
-border-radius: 8px;
-background: var(–surface2);
-color: var(–text2);
-font-size: 16px;
-display: flex; align-items: center; justify-content: center;
-cursor: pointer;
-transition: all 0.15s;
-position: relative;
-overflow: hidden;
-}
-.icon-btn:active { background: var(–border); }
-.icon-btn input[type=file] {
-position: absolute; inset: 0;
-opacity: 0; cursor: pointer;
-font-size: 0;
-}
-
-/* ── Month Bar ── */
-.month-bar {
-display: flex;
-align-items: center;
-gap: 8px;
-margin-top: 10px;
-padding: 8px 12px;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 10px;
-}
-.month-bar .cal-icon {
-font-size: 16px;
-color: var(–gold);
-flex-shrink: 0;
-}
-.month-bar select {
-flex: 1;
-padding: 6px 8px;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 6px;
-color: var(–text);
-font-family: ‘Heebo’, sans-serif;
-font-size: 14px;
-font-weight: 500;
-direction: rtl;
-outline: none;
--webkit-appearance: none;
-appearance: none;
-}
-.month-bar select:focus { border-color: var(–gold); }
-.month-bar input[type=number] {
-width: 72px;
-padding: 6px 8px;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 6px;
-color: var(–text);
-font-family: ‘Heebo’, sans-serif;
-font-size: 14px;
-font-weight: 500;
-text-align: center;
-outline: none;
-direction: ltr;
-}
-.month-bar input:focus { border-color: var(–gold); }
-
-/* ── Report Buttons ── */
-.report-bar {
-display: flex;
-gap: 8px;
-margin-top: 8px;
-}
-.report-btn {
-flex: 1;
-padding: 9px 10px;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–text2);
-font-family: ‘Heebo’, sans-serif;
-font-size: 12px;
-font-weight: 500;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 5px;
-transition: all 0.15s;
-}
-.report-btn:active { background: var(–border); color: var(–text); }
-.report-btn .ri { font-size: 14px; }
-
-.content {
-flex: 1;
-overflow-y: auto;
-overflow-x: hidden;
--webkit-overflow-scrolling: touch;
-padding: 16px 14px;
-padding-bottom: 80px;
-}
-
-.tab-bar {
-flex-shrink: 0;
-display: flex;
-background: var(–surface);
-border-top: 1px solid var(–border);
-padding-bottom: var(–safe-bottom);
-}
-.tab-btn {
-flex: 1;
-padding: 8px 2px 10px;
-background: none;
-border: none;
-color: var(–text3);
-font-family: ‘Heebo’, sans-serif;
-cursor: pointer;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 3px;
-transition: color 0.2s;
-position: relative;
-}
-.tab-btn.active { color: var(–gold); }
-.tab-btn.active::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 20%; right: 20%;
-height: 2px;
-background: var(–gold);
-border-radius: 0 0 2px 2px;
-}
-.tab-btn .icon { font-size: 18px; }
-.tab-btn .label { font-size: 10px; font-weight: 500; }
-
-.section-head {
-display: flex;
-align-items: center;
-gap: 8px;
-margin-bottom: 14px;
-}
-.section-head .ico { font-size: 18px; color: var(–gold); }
-.section-head h2 { font-size: 16px; font-weight: 600; }
-
-.card-list { display: flex; flex-direction: column; gap: 8px; }
-.card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 12px;
-position: relative;
-transition: border-color 0.2s;
-}
-.card:focus-within { border-color: var(–gold); }
-.card-row {
-display: flex;
-gap: 8px;
-margin-bottom: 8px;
-flex-wrap: wrap;
-}
-.card-row:last-child { margin-bottom: 0; }
-.field { flex: 1; min-width: 0; }
-.field.full { flex-basis: 100%; }
-.field label {
-display: block;
-font-size: 11px;
-font-weight: 500;
-color: var(–text2);
-margin-bottom: 4px;
-}
-.field input,
-.field select {
-width: 100%;
-padding: 9px 10px;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–text);
-font-family: ‘Heebo’, sans-serif;
-font-size: 14px;
-direction: rtl;
-outline: none;
-transition: border-color 0.15s;
-}
-.field input:focus,
-.field select:focus { border-color: var(–gold); }
-.field input::placeholder { color: var(–text3); }
-.field select { -webkit-appearance: none; appearance: none; }
-.card-delete {
-position: absolute;
-top: 8px;
-left: 8px;
-width: 26px; height: 26px;
-border: none;
-background: none;
-color: var(–text3);
-font-size: 14px;
-cursor: pointer;
-border-radius: 6px;
-display: flex; align-items: center; justify-content: center;
-}
-.card-delete:active { background: var(–border); color: var(–red); }
-
-.add-btn {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 6px;
-width: 100%;
-padding: 14px;
-margin-top: 10px;
-background: none;
-border: 1.5px dashed var(–border);
-border-radius: var(–radius);
-color: var(–text2);
-font-family: ‘Heebo’, sans-serif;
-font-size: 14px;
-font-weight: 500;
-cursor: pointer;
-}
-.add-btn:active { background: var(–surface); }
-
-.total-bar {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 14px 16px;
-margin-top: 10px;
-background: var(–surface2);
-border-radius: var(–radius);
-border: 1px solid var(–border);
-}
-.total-bar .lbl { font-size: 13px; font-weight: 600; color: var(–text2); }
-.total-bar .val { font-size: 20px; font-weight: 700; color: var(–gold); }
-
-.cat-section { margin-top: 24px; }
-.cat-section h3 { font-size: 14px; color: var(–text2); font-weight: 600; margin-bottom: 12px; }
-.cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.cat-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 12px;
-}
-.cat-card .name { font-size: 12px; color: var(–text2); margin-bottom: 2px; }
-.cat-card .amt { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-.cat-card .bar-bg { height: 3px; background: var(–border); border-radius: 2px; overflow: hidden; }
-.cat-card .bar-fill { height: 100%; background: linear-gradient(90deg, var(–gold), var(–gold2)); border-radius: 2px; transition: width 0.4s; }
-.cat-card .pct { font-size: 11px; color: var(–text3); margin-top: 4px; text-align: left; }
-
-.summary-stack {
-display: flex;
-flex-direction: column;
-gap: 14px;
-max-width: 400px;
-margin: 0 auto;
-}
-.summary-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 14px;
-padding: 22px 16px;
-text-align: center;
-}
-.summary-card .ico { font-size: 22px; color: var(–gold); margin-bottom: 6px; }
-.summary-card .lbl { font-size: 13px; color: var(–text2); margin-bottom: 4px; }
-.summary-card .amt { font-size: 24px; font-weight: 700; }
-.summary-divider { text-align: center; }
-.summary-op {
-display: inline-flex;
-width: 32px; height: 32px;
-align-items: center; justify-content: center;
-border-radius: 50%;
-background: var(–surface2);
-border: 1px solid var(–border);
-color: var(–text2);
-font-size: 16px;
-font-weight: 700;
-}
-.summary-card.result { border-width: 2px; }
-.summary-card .sub { font-size: 12px; margin-top: 4px; }
-
-.toast {
-position: fixed;
-bottom: 80px;
-left: 50%; transform: translateX(-50%);
-background: var(–surface2);
-border: 1px solid var(–border);
-color: var(–text);
-padding: 10px 20px;
-border-radius: 10px;
-font-family: ‘Heebo’, sans-serif;
-font-size: 13px;
-z-index: 999;
-animation: toastIn 0.3s, toastOut 0.3s 1.7s forwards;
-white-space: nowrap;
-}
-@keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-@keyframes toastOut { to { opacity:0; transform: translateX(-50%) translateY(10px); } }
+:root{--bg:#131210;--s1:#1e1d18;--s2:#26251f;--bd:#2e2d28;--t1:#e8e6e1;--t2:#8a8780;--t3:#5a5850;--gold:#c9a84c;--gold2:#a68932;--grn:#7ecba1;--red:#e8927c;--r:10px;--sab:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:'Heebo',sans-serif;background:var(--bg);color:var(--t1);direction:rtl;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:0;height:0}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
+.app{display:flex;flex-direction:column;height:100%;height:100dvh}
+.hdr{flex-shrink:0;padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--bd)}
+.hdr-top{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--bg);flex-shrink:0}
+.hdr h1{font-size:17px;font-weight:700;line-height:1.2}
+.hdr p{font-size:12px;color:var(--t2)}
+.hdr-act{margin-right:auto;display:flex;gap:6px}
+.ib{width:36px;height:36px;border:1px solid var(--bd);border-radius:8px;background:var(--s2);color:var(--t2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
+.ib:active{background:var(--bd)}
+.ib input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.mbar{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:10px}
+.mbar .ci{font-size:16px;color:var(--gold);flex-shrink:0}
+.mbar select{flex:1;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--t1);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;direction:rtl;outline:none;-webkit-appearance:none;appearance:none}
+.mbar select:focus{border-color:var(--gold)}
+.mbar input[type=number]{width:72px;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--t1);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;text-align:center;outline:none;direction:ltr}
+.mbar input:focus{border-color:var(--gold)}
+.rbar{display:flex;gap:8px;margin-top:8px}
+.rb{flex:1;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t2);font-family:'Heebo',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.rb:active{background:var(--bd);color:var(--t1)}
+.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px 14px 80px}
+.tbar{flex-shrink:0;display:flex;background:var(--s1);border-top:1px solid var(--bd);padding-bottom:var(--sab)}
+.tb{flex:1;padding:8px 2px 10px;background:none;border:none;color:var(--t3);font-family:'Heebo',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.tb.on{color:var(--gold)}
+.tb.on::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--gold);border-radius:0 0 2px 2px}
+.tb .ic{font-size:18px}
+.tb .lb{font-size:10px;font-weight:500}
+.sh{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.sh .ic{font-size:18px;color:var(--gold)}
+.sh h2{font-size:16px;font-weight:600}
+.cl{display:flex;flex-direction:column;gap:8px}
+.cd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:12px;position:relative}
+.cd:focus-within{border-color:var(--gold)}
+.cr{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.cr:last-child{margin-bottom:0}
+.fd{flex:1;min-width:0}
+.fd.fu{flex-basis:100%}
+.fd label{display:block;font-size:11px;font-weight:500;color:var(--t2);margin-bottom:4px}
+.fd input,.fd select{width:100%;padding:9px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;color:var(--t1);font-family:'Heebo',sans-serif;font-size:14px;direction:rtl;outline:none}
+.fd input:focus,.fd select:focus{border-color:var(--gold)}
+.fd input::placeholder{color:var(--t3)}
+.fd select{-webkit-appearance:none;appearance:none}
+.dx{position:absolute;top:8px;left:8px;width:26px;height:26px;border:none;background:none;color:var(--t3);font-size:14px;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.dx:active{background:var(--bd);color:var(--red)}
+.ab{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:14px;margin-top:10px;background:none;border:1.5px dashed var(--bd);border-radius:var(--r);color:var(--t2);font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.ab:active{background:var(--s1)}
+.tot{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;margin-top:10px;background:var(--s2);border-radius:var(--r);border:1px solid var(--bd)}
+.tot .l{font-size:13px;font-weight:600;color:var(--t2)}
+.tot .v{font-size:20px;font-weight:700;color:var(--gold)}
+.cs{margin-top:24px}
+.cs h3{font-size:14px;color:var(--t2);font-weight:600;margin-bottom:12px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:12px}
+.cc .n{font-size:12px;color:var(--t2);margin-bottom:2px}
+.cc .a{font-size:16px;font-weight:600;margin-bottom:8px}
+.cc .bb{height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.cc .bf{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px}
+.cc .p{font-size:11px;color:var(--t3);margin-top:4px;text-align:left}
+.ss{display:flex;flex-direction:column;gap:14px;max-width:400px;margin:0 auto}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:22px 16px;text-align:center}
+.sc .ic{font-size:22px;color:var(--gold);margin-bottom:6px}
+.sc .l{font-size:13px;color:var(--t2);margin-bottom:4px}
+.sc .a{font-size:24px;font-weight:700}
+.sd{text-align:center}
+.so{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:50%;background:var(--s2);border:1px solid var(--bd);color:var(--t2);font-size:16px;font-weight:700}
+.sc.res{border-width:2px}
+.sc .su{font-size:12px;margin-top:4px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--bd);color:var(--t1);padding:10px 20px;border-radius:10px;font-family:'Heebo',sans-serif;font-size:13px;z-index:999;animation:ti .3s,to .3s 1.7s forwards;white-space:nowrap}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes to{to{opacity:0;transform:translateX(-50%) translateY(10px)}}
 </style>
-
 </head>
 <body>
-
 <div class="app" id="app"></div>
-
 <script>
-var BASE_CATEGORIES = ["דיור","חינוך","בריאות","תחבורה","מזון","בילויים","ביגוד","חשבונות","ביטוח","אחר"];
-var customCategories = [];
-function getAllCategories(){ return BASE_CATEGORIES.concat(customCategories); }
-var TABS = [
-  {id:"equity",label:"הון עצמי",icon:"◆"},
-  {id:"savings",label:"חסכונות",icon:"◎"},
-  {id:"planned",label:"הוצאות מתוכננות",icon:"▤"},
-  {id:"monthly",label:"תזרים חודשי",icon:"◷"},
-  {id:"summary",label:"סיכום",icon:"Σ"}
-];
-var HEB_MONTHS = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
+(function(){
+"use strict";
 
-var now = new Date();
-var state = {
-  tab: "equity",
-  month: now.getMonth(),
-  year: now.getFullYear(),
-  equity: [mkEquity()],
-  savings: [mkSavings()],
-  planned: [mkPlanned()],
-  monthly: [mkMonthly()]
+var BASE_CATS=[“דיור”,“חינוך”,“בריאות”,“תחבורה”,“מזון”,“בילויים”,“ביגוד”,“חשבונות”,“ביטוח”];
+var customCats=[];
+function allCats(){return BASE_CATS.concat(customCats);}
+
+var TABS=[
+{id:“equity”,lb:“הון עצמי”,ic:“◆”},
+{id:“savings”,lb:“חסכונות”,ic:“◎”},
+{id:“planned”,lb:“הוצאות מתוכננות”,ic:“▤”},
+{id:“monthly”,lb:“תזרים חודשי”,ic:“◷”},
+{id:“summary”,lb:“סיכום”,ic:“Σ”}
+];
+var HMON=[“ינואר”,“פברואר”,“מרץ”,“אפריל”,“מאי”,“יוני”,“יולי”,“אוגוסט”,“ספטמבר”,“אוקטובר”,“נובמבר”,“דצמבר”];
+
+function uid(){return Math.random().toString(36).substr(2,9);}
+function mkE(){return{id:uid(),name:””,number:””,value:””,notes:””};}
+function mkS(){return{id:uid(),name:””,number:””,value:””,target:””,notes:””};}
+function mkP(){return{id:uid(),expense:””,amount:””,category:””,notes:””};}
+function mkM(){return{id:uid(),expense:””,amount:””,notes:””};}
+
+var now=new Date();
+var S={
+tab:“equity”,
+month:now.getMonth(),
+year:now.getFullYear(),
+equity:[mkE()],
+savings:[mkS()],
+planned:[mkP()],
+monthly:[mkM()]
 };
 
-function uid(){ return Math.random().toString(36).substr(2,9); }
-function mkEquity(){ return {id:uid(), name:"", number:"", value:"", notes:""}; }
-function mkSavings(){ return {id:uid(), name:"", number:"", value:"", target:"", notes:""}; }
-function mkPlanned(){ return {id:uid(), expense:"", amount:"", category:"", notes:""}; }
-function mkMonthly(){ return {id:uid(), expense:"", amount:"", notes:""}; }
+function fmt(v){var n=parseFloat(v);return isNaN(n)?“₪0”:“₪”+n.toLocaleString(“he-IL”);}
+function mLabel(){return HMON[S.month]+” “+S.year;}
+function esc(s){return String(s||””).replace(/&/g,”&”).replace(/”/g,”"”).replace(/</g,”<”);}
 
-function fmt(v){
-  var n = parseFloat(v);
-  if(isNaN(n)) return "₪0";
-  return "₪" + n.toLocaleString("he-IL");
+// ── expose to inline handlers ──
+window.switchTab=function(id){S.tab=id;render();};
+window.setMonth=function(v){S.month=parseInt(v);render();};
+window.setYear=function(v){var y=parseInt(v);if(y>=2020&&y<=2040)S.year=y;};
+window.upd=function(t,i,k,v){S[t][i][k]=v;};
+window.addRow=function(t){
+if(t===“equity”)S.equity.push(mkE());
+else if(t===“savings”)S.savings.push(mkS());
+else if(t===“planned”)S.planned.push(mkP());
+else if(t===“monthly”)S.monthly.push(mkM());
+render();
+setTimeout(function(){var c=document.querySelector(”.cnt”);if(c)c.scrollTop=c.scrollHeight;},50);
+};
+window.delRow=function(t,i){if(S[t].length<=1)return;S[t].splice(i,1);render();};
+
+window.handleCatSelect=function(el,tab,idx,key){
+if(el.value===”**new**”){
+var wrap=el.parentNode;
+var inp=document.createElement(“input”);
+inp.type=“text”;
+inp.placeholder=“הזן שם קטגוריה…”;
+inp.className=“cat-inp”;
+wrap.replaceChild(inp,el);
+inp.focus();
+var done=false;
+function commit(){
+if(done)return;done=true;
+var val=inp.value.trim();
+if(val){
+if(allCats().indexOf(val)===-1)customCats.push(val);
+S[tab][idx][key]=val;
+}else{S[tab][idx][key]=””;}
+render();
 }
-function getMonthLabel(){ return HEB_MONTHS[state.month] + " " + state.year; }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-// ── Render ──
-function render(){
-  var app = document.getElementById("app");
-  var t = state.tab;
-  var ct = TABS.find(function(x){ return x.id === t; });
-  var html = '';
-
-  // Header
-  html += '<div class="header">';
-  html += '<div class="header-top">';
-  html += '<div class="logo">₪</div>';
-  html += '<div><h1>ניהול תזרים</h1><p>מעקב הון, חסכונות והוצאות</p></div>';
-  html += '<div class="header-actions">';
-  html += '<button class="icon-btn" onclick="exportExcel()" title="ייצוא לאקסל">⬇</button>';
-  html += '<label class="icon-btn" title="ייבוא מאקסל">⬆<input type="file" accept=".xlsx,.xls" onchange="importExcel(event)"></label>';
-  html += '</div></div>';
-
-  // Month selector
-  html += '<div class="month-bar">';
-  html += '<span class="cal-icon">📅</span>';
-  html += '<select onchange="setMonth(this.value)">';
-  for(var m = 0; m < 12; m++){
-    html += '<option value="' + m + '"' + (state.month === m ? ' selected' : '') + '>' + HEB_MONTHS[m] + '</option>';
-  }
-  html += '</select>';
-  html += '<input type="number" value="' + state.year + '" min="2020" max="2040" onchange="setYear(this.value)" inputmode="numeric">';
-  html += '</div>';
-
-  // Report export buttons
-  html += '<div class="report-bar">';
-  html += '<button class="report-btn" onclick="exportMonthlyReportExcel()"><span class="ri">📊</span>דוח חודשי Excel</button>';
-  html += '<button class="report-btn" onclick="exportMonthlyReportHTML()"><span class="ri">📄</span>דוח חודשי HTML</button>';
-  html += '</div>';
-  html += '</div>';
-
-  // Content
-  html += '<div class="content">';
-  html += '<div class="section-head"><span class="ico">' + ct.icon + '</span><h2>' + ct.label + '</h2></div>';
-  if(t === "equity") html += renderEquity();
-  else if(t === "savings") html += renderSavings();
-  else if(t === "planned") html += renderPlanned();
-  else if(t === "monthly") html += renderMonthly();
-  else if(t === "summary") html += renderSummary();
-  html += '</div>';
-
-  // Tab bar
-  html += '<div class="tab-bar">';
-  TABS.forEach(function(tb){
-    html += '<button class="tab-btn' + (t===tb.id?' active':'') + '" onclick="switchTab(\'' + tb.id + '\')">';
-    html += '<span class="icon">' + tb.icon + '</span>';
-    html += '<span class="label">' + tb.label + '</span>';
-    html += '</button>';
-  });
-  html += '</div>';
-  app.innerHTML = html;
+inp.addEventListener(“blur”,commit);
+inp.addEventListener(“keydown”,function(e){if(e.key===“Enter”)inp.blur();});
+}else{
+S[tab][idx][key]=el.value;
 }
+};
 
-function switchTab(id){ state.tab = id; render(); }
-function setMonth(v){ state.month = parseInt(v); render(); }
-function setYear(v){ var y = parseInt(v); if(y >= 2020 && y <= 2040) state.year = y; }
+window.exportExcel=function(){
+var wb=XLSX.utils.book_new(),ml=mLabel();
+function addSheet(name,data,cols){var ws=XLSX.utils.aoa_to_sheet(data);ws[”!cols”]=cols;XLSX.utils.book_append_sheet(wb,ws,name);}
+var d1=[[“דוח — “+ml],[””],[“שם”,“מספר”,“ערך”,“הערות”]];
+S.equity.forEach(function(r){d1.push([r.name,r.number,parseFloat(r.value)||0,r.notes]);});
+addSheet(“הון עצמי”,d1,[{wch:20},{wch:15},{wch:15},{wch:25}]);
+var d2=[[“דוח — “+ml],[””],[“שם”,“מספר”,“ערך”,“יעד”,“הערות”]];
+S.savings.forEach(function(r){d2.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]);});
+addSheet(“חסכונות יעודיים”,d2,[{wch:20},{wch:15},{wch:15},{wch:15},{wch:25}]);
+var d3=[[“דוח — “+ml],[””],[“הוצאה”,“סכום”,“קטגוריה”,“הערות”]];
+S.planned.forEach(function(r){d3.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]);});
+addSheet(“הוצאות מתוכננות”,d3,[{wch:20},{wch:15},{wch:15},{wch:25}]);
+var d4=[[“דוח — “+ml],[””],[“הוצאה”,“סכום”,“הערות”]];
+S.monthly.forEach(function(r){d4.push([r.expense,parseFloat(r.amount)||0,r.notes]);});
+addSheet(“תזרים חודשי”,d4,[{wch:20},{wch:15},{wch:25}]);
+var rd=reportData();
+addSheet(“סיכום”,[[“דוח — “+ml],[””],[””,“סכום”],[“סך הון עצמי”,rd.tE],[“סך הוצאות מתוכננות”,rd.tP],[“סך הכל”,rd.net]],[{wch:25},{wch:15}]);
+XLSX.writeFile(wb,“תזרים_”+HMON[S.month]+”_”+S.year+”.xlsx”);
+toast(“הקובץ יוצא בהצלחה ✓”);
+};
 
-function renderEquity(){
-  var h = '<div class="card-list">';
-  state.equity.forEach(function(r,i){
-    h += '<div class="card"><button class="card-delete" onclick="delRow(\'equity\','+i+')">✕</button>';
-    h += '<div class="card-row">' + field("שם","text",r.name,"equity",i,"name","שם המקור") + field("מספר","text",r.number,"equity",i,"number","מספר חשבון") + '</div>';
-    h += '<div class="card-row">' + field("ערך","number",r.value,"equity",i,"value","0") + field("הערות","text",r.notes,"equity",i,"notes","הערות") + '</div></div>';
-  });
-  h += '</div>';
-  var total = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
-  h += '<div class="total-bar"><span class="lbl">סך הכל הון עצמי</span><span class="val">'+fmt(total)+'</span></div>';
-  h += '<button class="add-btn" onclick="addRow(\'equity\')">+ הוסף מקור</button>';
-  return h;
+window.importExcel=function(e){
+var file=e.target.files[0];if(!file)return;
+var reader=new FileReader();
+reader.onload=function(ev){
+try{
+var wb=XLSX.read(ev.target.result,{type:“array”}),nm=wb.SheetNames;
+importTab(wb,nm,[“הון עצמי”],[“שם”,“מספר”,“ערך”],“equity”,function(r){return{id:uid(),name:String(r[0]||””),number:String(r[1]||””),value:String(r[2]||””),notes:String(r[3]||””)};},mkE);
+importTab(wb,nm,[“חסכונות יעודיים”,“חסכונות”],[“שם”,“מספר”,“ערך”],“savings”,function(r){return{id:uid(),name:String(r[0]||””),number:String(r[1]||””),value:String(r[2]||””),target:String(r[3]||””),notes:String(r[4]||””)};},mkS);
+importTab(wb,nm,[“הוצאות מתוכננות”],[“הוצאה”,“סכום”],“planned”,function(r){return{id:uid(),expense:String(r[0]||””),amount:String(r[1]||””),category:String(r[2]||””),notes:String(r[3]||””)};},mkP);
+importTab(wb,nm,[“תזרים חודשי”],[“הוצאה”,“סכום”],“monthly”,function(r){return{id:uid(),expense:String(r[0]||””),amount:String(r[1]||””),notes:String(r[2]||””)};},mkM);
+syncCats();render();toast(“הקובץ יובא בהצלחה ✓”);
+}catch(err){toast(“שגיאה בייבוא”);console.error(err);}
+};
+reader.readAsArrayBuffer(file);e.target.value=””;
+};
+
+function importTab(wb,names,kw,hdr,key,mapFn,mkFn){
+var ws=findSheet(wb,names,kw);if(!ws)return;
+var rows=XLSX.utils.sheet_to_json(ws,{header:1}),sr=findHdr(rows,hdr);
+if(sr<0)return;
+S[key]=[];
+for(var i=sr+1;i<rows.length;i++){var r=rows[i];if(!r||(!r[0]&&!r[1]))continue;S[key].push(mapFn(r));}
+if(!S[key].length)S[key].push(mkFn());
 }
-
-function renderSavings(){
-  var h = '<div class="card-list">';
-  state.savings.forEach(function(r,i){
-    h += '<div class="card"><button class="card-delete" onclick="delRow(\'savings\','+i+')">✕</button>';
-    h += '<div class="card-row">' + field("שם","text",r.name,"savings",i,"name","שם החיסכון") + field("מספר","text",r.number,"savings",i,"number","מספר") + '</div>';
-    h += '<div class="card-row">' + field("ערך","number",r.value,"savings",i,"value","0") + field("יעד","text",r.target,"savings",i,"target","יעד") + '</div>';
-    h += '<div class="card-row">' + field("הערות","text",r.notes,"savings",i,"notes","הערות",true) + '</div></div>';
-  });
-  h += '</div>';
-  var total = state.savings.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
-  h += '<div class="total-bar"><span class="lbl">סך חסכונות יעודיים</span><span class="val">'+fmt(total)+'</span></div>';
-  h += '<button class="add-btn" onclick="addRow(\'savings\')">+ הוסף חיסכון</button>';
-  return h;
-}
-
-function renderPlanned(){
-  var h = '<div class="card-list">';
-  state.planned.forEach(function(r,i){
-    h += '<div class="card"><button class="card-delete" onclick="delRow(\'planned\','+i+')">✕</button>';
-    h += '<div class="card-row">' + field("הוצאה","text",r.expense,"planned",i,"expense","שם ההוצאה") + field("סכום","number",r.amount,"planned",i,"amount","0") + '</div>';
-    h += '<div class="card-row">' + selectField("קטגוריה",r.category,"planned",i,"category") + field("הערות","text",r.notes,"planned",i,"notes","הערות") + '</div></div>';
-  });
-  h += '</div>';
-  var total = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
-  h += '<div class="total-bar"><span class="lbl">סך הוצאות מתוכננות</span><span class="val">'+fmt(total)+'</span></div>';
-  h += '<button class="add-btn" onclick="addRow(\'planned\')">+ הוסף הוצאה</button>';
-  var cats = {};
-  state.planned.forEach(function(r){ if(r.category && r.amount) cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0); });
-  var ck = Object.keys(cats);
-  if(ck.length){
-    ck.sort(function(a,b){ return cats[b]-cats[a]; });
-    h += '<div class="cat-section"><h3>סיכום לפי קטגוריות</h3><div class="cat-grid">';
-    ck.forEach(function(c){
-      var pct = total>0?(cats[c]/total*100):0;
-      h += '<div class="cat-card"><div class="name">'+c+'</div><div class="amt">'+fmt(cats[c])+'</div>';
-      h += '<div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%"></div></div><div class="pct">'+pct.toFixed(1)+'%</div></div>';
-    });
-    h += '</div></div>';
-  }
-  return h;
-}
-
-function renderMonthly(){
-  var h = '<div class="card-list">';
-  state.monthly.forEach(function(r,i){
-    h += '<div class="card"><button class="card-delete" onclick="delRow(\'monthly\','+i+')">✕</button>';
-    h += '<div class="card-row">' + field("הוצאה","text",r.expense,"monthly",i,"expense","שם ההוצאה") + field("סכום","number",r.amount,"monthly",i,"amount","0") + '</div>';
-    h += '<div class="card-row">' + field("הערות","text",r.notes,"monthly",i,"notes","הערות",true) + '</div></div>';
-  });
-  h += '</div>';
-  var total = state.monthly.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
-  h += '<div class="total-bar"><span class="lbl">סך תזרים חודשי</span><span class="val">'+fmt(total)+'</span></div>';
-  h += '<button class="add-btn" onclick="addRow(\'monthly\')">+ הוסף הוצאה</button>';
-  return h;
-}
-
-function renderSummary(){
-  var tE = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
-  var tP = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
-  var net = tE - tP;
-  var clr = net>=0?'var(--green)':'var(--red)';
-  var h = '<div class="summary-stack">';
-  h += '<div class="summary-card"><div class="ico">◆</div><div class="lbl">סך הון עצמי</div><div class="amt" style="color:var(--green)">'+fmt(tE)+'</div></div>';
-  h += '<div class="summary-divider"><span class="summary-op">−</span></div>';
-  h += '<div class="summary-card"><div class="ico">▤</div><div class="lbl">סך הוצאות מתוכננות</div><div class="amt" style="color:var(--red)">'+fmt(tP)+'</div></div>';
-  h += '<div class="summary-divider"><span class="summary-op">=</span></div>';
-  h += '<div class="summary-card result" style="border-color:'+clr+'"><div class="ico">Σ</div><div class="lbl">סך הכל</div><div class="amt" style="font-size:28px;color:'+clr+'">'+fmt(net)+'</div><div class="sub" style="color:'+clr+'">'+(net>=0?'יתרה חיובית':'יתרה שלילית')+'</div></div>';
-  h += '</div>';
-  return h;
-}
-
-// ── Field helpers ──
-function field(label,type,value,tab,idx,key,ph,full){
-  var cls = full?'field full':'field';
-  return '<div class="'+cls+'"><label>'+label+'</label><input type="'+type+'" value="'+esc(value)+'" placeholder="'+esc(ph)+'" oninput="upd(\''+tab+'\','+idx+',\''+key+'\',this.value)" inputmode="'+(type==='number'?'decimal':'text')+'"></div>';
-}
-function selectField(label,value,tab,idx,key){
-  var cats = getAllCategories();
-  // If current value is custom and not in list, add it temporarily
-  if(value && cats.indexOf(value)===-1) cats = cats.concat([value]);
-  var h = '<div class="field"><label>'+label+'</label>';
-  h += '<select onchange="handleCatSelect(this,\''+tab+'\','+idx+',\''+key+'\')">';
-  h += '<option value="">בחר...</option>';
-  cats.forEach(function(c){ h += '<option value="'+c+'"'+(value===c?' selected':'')+'>'+c+'</option>'; });
-  h += '<option value="__new__">+ קטגוריה חדשה...</option>';
-  h += '</select></div>';
-  return h;
-}
-function handleCatSelect(el,tab,idx,key){
-  if(el.value === '__new__'){
-    // Replace select with text input
-    var parent = el.parentNode;
-    var inp = document.createElement('input');
-    inp.type = 'text';
-    inp.placeholder = 'הזן שם קטגוריה...';
-    inp.style.cssText = 'width:100%;padding:9px 10px;background:var(--bg);border:1.5px solid var(--gold);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:14px;direction:rtl;outline:none;';
-    parent.replaceChild(inp, el);
-    inp.focus();
-    inp.addEventListener('blur', function(){
-      var val = inp.value.trim();
-      if(val){
-        // Add to custom categories if not already there
-        var all = getAllCategories();
-        if(all.indexOf(val)===-1) customCategories.push(val);
-        state[tab][idx][key] = val;
-      } else {
-        state[tab][idx][key] = '';
-      }
-      render();
-    });
-    inp.addEventListener('keydown', function(e){
-      if(e.key === 'Enter') inp.blur();
-    });
-  } else {
-    state[tab][idx][key] = el.value;
-  }
-}
-
-function upd(tab,idx,key,val){ state[tab][idx][key] = val; }
-function addRow(tab){
-  if(tab==='equity') state.equity.push(mkEquity());
-  else if(tab==='savings') state.savings.push(mkSavings());
-  else if(tab==='planned') state.planned.push(mkPlanned());
-  else if(tab==='monthly') state.monthly.push(mkMonthly());
-  render();
-  setTimeout(function(){ var c=document.querySelector('.content'); if(c) c.scrollTop=c.scrollHeight; },50);
-}
-function delRow(tab,idx){
-  if(state[tab].length<=1) return;
-  state[tab].splice(idx,1);
-  render();
-}
-
-function toast(msg){
-  var el=document.createElement('div'); el.className='toast'; el.textContent=msg;
-  document.body.appendChild(el);
-  setTimeout(function(){ el.remove(); },2100);
-}
-
-// ── Helper ──
-function buildReportData(){
-  var tE = state.equity.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
-  var tS = state.savings.reduce(function(s,r){ return s+(parseFloat(r.value)||0); },0);
-  var tP = state.planned.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
-  var tM = state.monthly.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); },0);
-  var cats = {};
-  state.planned.forEach(function(r){ if(r.category&&r.amount) cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0); });
-  return { label:getMonthLabel(), tE:tE, tS:tS, tP:tP, tM:tM, net:tE-tP, cats:cats };
-}
-
-// ══════════════════════════
-// ── Full Data Excel Export ──
-// ══════════════════════════
-function exportExcel(){
-  var wb = XLSX.utils.book_new();
-  var ml = getMonthLabel();
-
-  var d1 = [["דוח תזרים — "+ml],[""],["שם","מספר","ערך","הערות"]];
-  state.equity.forEach(function(r){ d1.push([r.name,r.number,parseFloat(r.value)||0,r.notes]); });
-  var ws1 = XLSX.utils.aoa_to_sheet(d1); ws1['!cols']=[{wch:20},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb,ws1,"הון עצמי");
-
-  var d2 = [["דוח תזרים — "+ml],[""],["שם","מספר","ערך","יעד","הערות"]];
-  state.savings.forEach(function(r){ d2.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]); });
-  var ws2 = XLSX.utils.aoa_to_sheet(d2); ws2['!cols']=[{wch:20},{wch:15},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb,ws2,"חסכונות יעודיים");
-
-  var d3 = [["דוח תזרים — "+ml],[""],["הוצאה","סכום","קטגוריה","הערות"]];
-  state.planned.forEach(function(r){ d3.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]); });
-  var ws3 = XLSX.utils.aoa_to_sheet(d3); ws3['!cols']=[{wch:20},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb,ws3,"הוצאות מתוכננות");
-
-  var d4 = [["דוח תזרים — "+ml],[""],["הוצאה","סכום","הערות"]];
-  state.monthly.forEach(function(r){ d4.push([r.expense,parseFloat(r.amount)||0,r.notes]); });
-  var ws4 = XLSX.utils.aoa_to_sheet(d4); ws4['!cols']=[{wch:20},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb,ws4,"תזרים חודשי");
-
-  var rd = buildReportData();
-  var d5 = [["דוח תזרים — "+ml],[""],["","סכום"],["סך הון עצמי",rd.tE],["סך הוצאות מתוכננות",rd.tP],["סך הכל",rd.net]];
-  var ws5 = XLSX.utils.aoa_to_sheet(d5); ws5['!cols']=[{wch:25},{wch:15}];
-  XLSX.utils.book_append_sheet(wb,ws5,"סיכום");
-
-  XLSX.writeFile(wb,"תזרים_"+HEB_MONTHS[state.month]+"_"+state.year+".xlsx");
-  toast("הקובץ יוצא בהצלחה ✓");
-}
-
-// ══════════════════════════
-// ── Excel Import ──
-// ══════════════════════════
-function importExcel(e){
-  var file = e.target.files[0]; if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev){
-    try {
-      var wb = XLSX.read(ev.target.result,{type:'array'});
-      var names = wb.SheetNames;
-
-      var eqS = findSheet(wb,names,["הון עצמי","equity"]);
-      if(eqS){ var rows=XLSX.utils.sheet_to_json(eqS,{header:1}); var sr=findDataStart(rows,["שם","מספר","ערך"]);
-        if(sr>=0){ state.equity=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]&&!r[2]))continue; state.equity.push({id:uid(),name:String(r[0]||''),number:String(r[1]||''),value:String(r[2]||''),notes:String(r[3]||'')}); } if(!state.equity.length) state.equity.push(mkEquity()); } }
-
-      var svS = findSheet(wb,names,["חסכונות יעודיים","חסכונות","savings"]);
-      if(svS){ var rows=XLSX.utils.sheet_to_json(svS,{header:1}); var sr=findDataStart(rows,["שם","מספר","ערך"]);
-        if(sr>=0){ state.savings=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]&&!r[2]))continue; state.savings.push({id:uid(),name:String(r[0]||''),number:String(r[1]||''),value:String(r[2]||''),target:String(r[3]||''),notes:String(r[4]||'')}); } if(!state.savings.length) state.savings.push(mkSavings()); } }
-
-      var plS = findSheet(wb,names,["הוצאות מתוכננות","planned"]);
-      if(plS){ var rows=XLSX.utils.sheet_to_json(plS,{header:1}); var sr=findDataStart(rows,["הוצאה","סכום"]);
-        if(sr>=0){ state.planned=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]))continue; state.planned.push({id:uid(),expense:String(r[0]||''),amount:String(r[1]||''),category:String(r[2]||''),notes:String(r[3]||'')}); } if(!state.planned.length) state.planned.push(mkPlanned()); } }
-
-      var moS = findSheet(wb,names,["תזרים חודשי","monthly"]);
-      if(moS){ var rows=XLSX.utils.sheet_to_json(moS,{header:1}); var sr=findDataStart(rows,["הוצאה","סכום"]);
-        if(sr>=0){ state.monthly=[]; for(var i=sr+1;i<rows.length;i++){ var r=rows[i]; if(!r||(!r[0]&&!r[1]))continue; state.monthly.push({id:uid(),expense:String(r[0]||''),amount:String(r[1]||''),notes:String(r[2]||'')}); } if(!state.monthly.length) state.monthly.push(mkMonthly()); } }
-
-      syncCustomCategories();
-      render();
-      toast("הקובץ יובא בהצלחה ✓");
-    } catch(err){ toast("שגיאה בייבוא הקובץ"); console.error(err); }
-  };
-  reader.readAsArrayBuffer(file);
-  e.target.value = '';
-}
-
-function syncCustomCategories(){
-  var base = BASE_CATEGORIES;
-  state.planned.forEach(function(r){
-    if(r.category && base.indexOf(r.category)===-1 && customCategories.indexOf(r.category)===-1){
-      customCategories.push(r.category);
-    }
-  });
-}
-
 function findSheet(wb,names,kw){
-  for(var n=0;n<names.length;n++) for(var k=0;k<kw.length;k++) if(names[n].indexOf(kw[k])!==-1) return wb.Sheets[names[n]];
-  return null;
+for(var n=0;n<names.length;n++)for(var k=0;k<kw.length;k++)if(names[n].indexOf(kw[k])!==-1)return wb.Sheets[names[n]];
+return null;
 }
-function findDataStart(rows,hdr){
-  for(var i=0;i<rows.length;i++){ if(!rows[i])continue; var ok=true;
-    for(var k=0;k<hdr.length;k++) if(String(rows[i][k]||'')!==hdr[k]){ok=false;break;}
-    if(ok) return i;
-  } return 0;
+function findHdr(rows,hdr){
+for(var i=0;i<rows.length;i++){if(!rows[i])continue;var ok=true;
+for(var k=0;k<hdr.length;k++)if(String(rows[i][k]||””)!==hdr[k]){ok=false;break;}
+if(ok)return i;}return 0;
 }
-
-// ══════════════════════════════════
-// ── Monthly Report — Excel ──
-// ══════════════════════════════════
-function exportMonthlyReportExcel(){
-  var rd = buildReportData();
-  var wb = XLSX.utils.book_new();
-  var d = [];
-  d.push(["דוח חודשי — "+rd.label]); d.push([""]);
-  d.push(["סיכום"]); d.push(["סך הון עצמי",rd.tE]); d.push(["סך חסכונות יעודיים",rd.tS]);
-  d.push(["סך הוצאות מתוכננות",rd.tP]); d.push(["סך תזרים חודשי",rd.tM]);
-  d.push(["יתרה (הון − הוצאות מתוכננות)",rd.net]); d.push([""]);
-
-  d.push(["◆ הון עצמי"]); d.push(["שם","מספר","ערך","הערות"]);
-  state.equity.forEach(function(r){ if(r.name||r.value) d.push([r.name,r.number,parseFloat(r.value)||0,r.notes]); });
-  d.push([""]);
-
-  d.push(["◎ חסכונות יעודיים"]); d.push(["שם","מספר","ערך","יעד","הערות"]);
-  state.savings.forEach(function(r){ if(r.name||r.value) d.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]); });
-  d.push([""]);
-
-  d.push(["▤ הוצאות מתוכננות"]); d.push(["הוצאה","סכום","קטגוריה","הערות"]);
-  state.planned.forEach(function(r){ if(r.expense||r.amount) d.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]); });
-  d.push([""]);
-
-  var ck=Object.keys(rd.cats);
-  if(ck.length){ ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
-    d.push(["סיכום לפי קטגוריות"]); d.push(["קטגוריה","סכום"]);
-    ck.forEach(function(c){ d.push([c,rd.cats[c]]); }); d.push([""]);
-  }
-
-  d.push(["◷ תזרים חודשי"]); d.push(["הוצאה","סכום","הערות"]);
-  state.monthly.forEach(function(r){ if(r.expense||r.amount) d.push([r.expense,parseFloat(r.amount)||0,r.notes]); });
-
-  var ws=XLSX.utils.aoa_to_sheet(d); ws['!cols']=[{wch:30},{wch:15},{wch:15},{wch:15},{wch:25}];
-  XLSX.utils.book_append_sheet(wb,ws,"דוח חודשי");
-  XLSX.writeFile(wb,"דוח_"+HEB_MONTHS[state.month]+"_"+state.year+".xlsx");
-  toast("דוח חודשי Excel יוצא ✓");
+function syncCats(){
+S.planned.forEach(function(r){
+if(r.category&&BASE_CATS.indexOf(r.category)===-1&&customCats.indexOf(r.category)===-1)customCats.push(r.category);
+});
 }
 
-// ══════════════════════════════════
-// ── Monthly Report — HTML ──
-// ══════════════════════════════════
-function exportMonthlyReportHTML(){
-  var rd = buildReportData();
-  var h = '<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
-  h += '<title>דוח חודשי — '+esc(rd.label)+'</title>';
-  h += '<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700&display=swap" rel="stylesheet">';
-  h += '<style>';
-  h += 'body{font-family:"Heebo",sans-serif;background:#131210;color:#e8e6e1;padding:20px 16px;direction:rtl;margin:0;max-width:700px;margin:0 auto}';
-  h += 'h1{font-size:20px;color:#c9a84c;margin-bottom:4px}';
-  h += '.sub{color:#8a8780;font-size:13px;margin-bottom:24px}';
-  h += '.section{margin-bottom:24px}';
-  h += '.section h2{font-size:15px;color:#c9a84c;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #2e2d28}';
-  h += 'table{width:100%;border-collapse:collapse;margin-bottom:8px}';
-  h += 'th{text-align:right;padding:8px 10px;font-size:12px;color:#8a8780;background:#1e1d18;border-bottom:1px solid #2e2d28}';
-  h += 'td{padding:8px 10px;font-size:14px;border-bottom:1px solid #1e1d18}';
-  h += '.sr{display:flex;justify-content:space-between;padding:10px 14px;background:#1e1d18;border-radius:8px;margin-bottom:6px}';
-  h += '.sr .l{color:#8a8780;font-size:13px}.sr .v{font-weight:700;font-size:16px}';
-  h += '.grn{color:#7ecba1}.rd{color:#e8927c}.gld{color:#c9a84c}';
-  h += '.nb{text-align:center;padding:20px;background:#1e1d18;border-radius:12px;margin-top:16px}';
-  h += '.nb .l{color:#8a8780;font-size:14px;margin-bottom:4px}.nb .v{font-size:28px;font-weight:700}';
-  h += '.pb{display:block;margin:24px auto 0;padding:12px 32px;background:#c9a84c;color:#131210;border:none;border-radius:8px;font-family:"Heebo";font-size:14px;font-weight:600;cursor:pointer}';
-  h += '@media print{.pb{display:none}body{background:#fff;color:#222;max-width:100%}th{background:#f5f5f5;color:#555}td{border-color:#eee}.sr{background:#f5f5f5}.nb{background:#f5f5f5}.grn{color:#2a8a52}.rd{color:#c44}.gld{color:#8a6d1b}}';
-  h += '</style></head><body>';
+function reportData(){
+var tE=S.equity.reduce(function(s,r){return s+(parseFloat(r.value)||0);},0);
+var tS=S.savings.reduce(function(s,r){return s+(parseFloat(r.value)||0);},0);
+var tP=S.planned.reduce(function(s,r){return s+(parseFloat(r.amount)||0);},0);
+var tM=S.monthly.reduce(function(s,r){return s+(parseFloat(r.amount)||0);},0);
+var cats={};S.planned.forEach(function(r){if(r.category&&r.amount)cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0);});
+return{label:mLabel(),tE:tE,tS:tS,tP:tP,tM:tM,net:tE-tP,cats:cats};
+}
 
-h += ‘<h1>📊 דוח חודשי — ‘+esc(rd.label)+’</h1><div class="sub">הופק מאפליקציית ניהול תזרים</div>’;
+window.exportReportXl=function(){
+var rd=reportData(),wb=XLSX.utils.book_new(),d=[];
+d.push([“דוח חודשי — “+rd.label],[””]);
+d.push([“סיכום”]);d.push([“סך הון עצמי”,rd.tE]);d.push([“סך חסכונות”,rd.tS]);d.push([“סך הוצאות מתוכננות”,rd.tP]);d.push([“סך תזרים חודשי”,rd.tM]);d.push([“יתרה”,rd.net]);d.push([””]);
+d.push([“◆ הון עצמי”]);d.push([“שם”,“מספר”,“ערך”,“הערות”]);
+S.equity.forEach(function(r){if(r.name||r.value)d.push([r.name,r.number,parseFloat(r.value)||0,r.notes]);});d.push([””]);
+d.push([“◎ חסכונות יעודיים”]);d.push([“שם”,“מספר”,“ערך”,“יעד”,“הערות”]);
+S.savings.forEach(function(r){if(r.name||r.value)d.push([r.name,r.number,parseFloat(r.value)||0,r.target,r.notes]);});d.push([””]);
+d.push([“▤ הוצאות מתוכננות”]);d.push([“הוצאה”,“סכום”,“קטגוריה”,“הערות”]);
+S.planned.forEach(function(r){if(r.expense||r.amount)d.push([r.expense,parseFloat(r.amount)||0,r.category,r.notes]);});d.push([””]);
+var ck=Object.keys(rd.cats);if(ck.length){ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
+d.push([“סיכום לפי קטגוריות”]);d.push([“קטגוריה”,“סכום”]);ck.forEach(function(c){d.push([c,rd.cats[c]]);});d.push([””]);
+}
+d.push([“◷ תזרים חודשי”]);d.push([“הוצאה”,“סכום”,“הערות”]);
+S.monthly.forEach(function(r){if(r.expense||r.amount)d.push([r.expense,parseFloat(r.amount)||0,r.notes]);});
+var ws=XLSX.utils.aoa_to_sheet(d);ws[”!cols”]=[{wch:30},{wch:15},{wch:15},{wch:15},{wch:25}];
+XLSX.utils.book_append_sheet(wb,ws,“דוח חודשי”);
+XLSX.writeFile(wb,“דוח_”+HMON[S.month]+”_”+S.year+”.xlsx”);
+toast(“דוח חודשי Excel ✓”);
+};
 
-h += ‘<div class="section">’;
-h += ‘<div class="sr"><span class="l">סך הון עצמי</span><span class="v grn">’+fmt(rd.tE)+’</span></div>’;
-h += ‘<div class="sr"><span class="l">סך חסכונות יעודיים</span><span class="v gld">’+fmt(rd.tS)+’</span></div>’;
-h += ‘<div class="sr"><span class="l">סך הוצאות מתוכננות</span><span class="v rd">’+fmt(rd.tP)+’</span></div>’;
-h += ‘<div class="sr"><span class="l">סך תזרים חודשי</span><span class="v rd">’+fmt(rd.tM)+’</span></div>’;
-var nc = rd.net>=0?‘grn’:‘rd’;
-h += ‘<div class="nb"><div class="l">יתרה (הון עצמי − הוצאות מתוכננות)</div><div class="v '+nc+'">’+fmt(rd.net)+’</div></div></div>’;
+window.exportReportHtml=function(){
+var rd=reportData();
+var nc=rd.net>=0?”#7ecba1”:”#e8927c”;
+var parts=[];
+parts.push(”<!DOCTYPE html><html lang='he' dir='rtl'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>”);
+parts.push(”<title>דוח — “+esc(rd.label)+”</title>”);
+parts.push(”<link href='https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700&display=swap' rel='stylesheet'>”);
+parts.push(”<style>body{font-family:‘Heebo’,sans-serif;background:#131210;color:#e8e6e1;padding:20px 16px;direction:rtl;margin:0 auto;max-width:700px}”);
+parts.push(“h1{font-size:20px;color:#c9a84c;margin-bottom:4px}.sub{color:#8a8780;font-size:13px;margin-bottom:24px}”);
+parts.push(”.sec{margin-bottom:24px}.sec h2{font-size:15px;color:#c9a84c;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #2e2d28}”);
+parts.push(“table{width:100%;border-collapse:collapse;margin-bottom:8px}th{text-align:right;padding:8px 10px;font-size:12px;color:#8a8780;background:#1e1d18;border-bottom:1px solid #2e2d28}”);
+parts.push(“td{padding:8px 10px;font-size:14px;border-bottom:1px solid #1e1d18}”);
+parts.push(”.sr{display:flex;justify-content:space-between;padding:10px 14px;background:#1e1d18;border-radius:8px;margin-bottom:6px}.sr .l{color:#8a8780;font-size:13px}.sr .v{font-weight:700;font-size:16px}”);
+parts.push(”.nb{text-align:center;padding:20px;background:#1e1d18;border-radius:12px;margin-top:16px}.nb .l{color:#8a8780;font-size:14px;margin-bottom:4px}.nb .v{font-size:28px;font-weight:700}”);
+parts.push(”.pb{display:block;margin:24px auto 0;padding:12px 32px;background:#c9a84c;color:#131210;border:none;border-radius:8px;font-family:‘Heebo’;font-size:14px;font-weight:600;cursor:pointer}”);
+parts.push(”@media print{.pb{display:none}body{background:#fff;color:#222;max-width:100%}th{background:#f5f5f5;color:#555}td{border-color:#eee}.sr{background:#f5f5f5}.nb{background:#f5f5f5}}”);
+parts.push(”</style></head><body>”);
+parts.push(”<h1>📊 דוח חודשי — “+esc(rd.label)+”</h1><div class='sub'>הופק מאפליקציית ניהול תזרים</div>”);
 
-// Tables
-h += ‘<div class="section"><h2>◆ הון עצמי</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>הערות</th></tr>’;
-state.equity.forEach(function(r){ if(r.name||r.value) h+=’<tr><td>’+esc(r.name)+’</td><td>’+esc(r.number)+’</td><td>’+fmt(r.value)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
-h += ‘</table></div>’;
+parts.push(”<div class='sec'>”);
+parts.push(”<div class='sr'><span class='l'>סך הון עצמי</span><span class='v' style='color:#7ecba1'>”+fmt(rd.tE)+”</span></div>”);
+parts.push(”<div class='sr'><span class='l'>סך חסכונות</span><span class='v' style='color:#c9a84c'>”+fmt(rd.tS)+”</span></div>”);
+parts.push(”<div class='sr'><span class='l'>סך הוצאות מתוכננות</span><span class='v' style='color:#e8927c'>”+fmt(rd.tP)+”</span></div>”);
+parts.push(”<div class='sr'><span class='l'>סך תזרים חודשי</span><span class='v' style='color:#e8927c'>”+fmt(rd.tM)+”</span></div>”);
+parts.push(”<div class='nb'><div class='l'>יתרה (הון − הוצאות מתוכננות)</div><div class='v' style='color:"+nc+"'>”+fmt(rd.net)+”</div></div></div>”);
 
-h += ‘<div class="section"><h2>◎ חסכונות יעודיים</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>יעד</th><th>הערות</th></tr>’;
-state.savings.forEach(function(r){ if(r.name||r.value) h+=’<tr><td>’+esc(r.name)+’</td><td>’+esc(r.number)+’</td><td>’+fmt(r.value)+’</td><td>’+esc(r.target)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
-h += ‘</table></div>’;
+parts.push(”<div class='sec'><h2>◆ הון עצמי</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>הערות</th></tr>”);
+S.equity.forEach(function(r){if(r.name||r.value)parts.push(”<tr><td>”+esc(r.name)+”</td><td>”+esc(r.number)+”</td><td>”+fmt(r.value)+”</td><td>”+esc(r.notes)+”</td></tr>”);});
+parts.push(”</table></div>”);
 
-h += ‘<div class="section"><h2>▤ הוצאות מתוכננות</h2><table><tr><th>הוצאה</th><th>סכום</th><th>קטגוריה</th><th>הערות</th></tr>’;
-state.planned.forEach(function(r){ if(r.expense||r.amount) h+=’<tr><td>’+esc(r.expense)+’</td><td>’+fmt(r.amount)+’</td><td>’+esc(r.category)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
-h += ‘</table></div>’;
+parts.push(”<div class='sec'><h2>◎ חסכונות יעודיים</h2><table><tr><th>שם</th><th>מספר</th><th>ערך</th><th>יעד</th><th>הערות</th></tr>”);
+S.savings.forEach(function(r){if(r.name||r.value)parts.push(”<tr><td>”+esc(r.name)+”</td><td>”+esc(r.number)+”</td><td>”+fmt(r.value)+”</td><td>”+esc(r.target)+”</td><td>”+esc(r.notes)+”</td></tr>”);});
+parts.push(”</table></div>”);
+
+parts.push(”<div class='sec'><h2>▤ הוצאות מתוכננות</h2><table><tr><th>הוצאה</th><th>סכום</th><th>קטגוריה</th><th>הערות</th></tr>”);
+S.planned.forEach(function(r){if(r.expense||r.amount)parts.push(”<tr><td>”+esc(r.expense)+”</td><td>”+fmt(r.amount)+”</td><td>”+esc(r.category)+”</td><td>”+esc(r.notes)+”</td></tr>”);});
+parts.push(”</table></div>”);
 
 var ck=Object.keys(rd.cats);
-if(ck.length){ ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
-h+=’<div class="section"><h2>סיכום לפי קטגוריות</h2><table><tr><th>קטגוריה</th><th>סכום</th><th>אחוז</th></tr>’;
-ck.forEach(function(c){ var p=rd.tP>0?(rd.cats[c]/rd.tP*100).toFixed(1):‘0’; h+=’<tr><td>’+esc(c)+’</td><td>’+fmt(rd.cats[c])+’</td><td>’+p+’%</td></tr>’; });
-h+=’</table></div>’;
+if(ck.length){ck.sort(function(a,b){return rd.cats[b]-rd.cats[a];});
+parts.push(”<div class='sec'><h2>סיכום לפי קטגוריות</h2><table><tr><th>קטגוריה</th><th>סכום</th><th>אחוז</th></tr>”);
+ck.forEach(function(c){var p=rd.tP>0?(rd.cats[c]/rd.tP*100).toFixed(1):“0”;parts.push(”<tr><td>”+esc(c)+”</td><td>”+fmt(rd.cats[c])+”</td><td>”+p+”%</td></tr>”);});
+parts.push(”</table></div>”);
 }
 
-h += ‘<div class="section"><h2>◷ תזרים חודשי</h2><table><tr><th>הוצאה</th><th>סכום</th><th>הערות</th></tr>’;
-state.monthly.forEach(function(r){ if(r.expense||r.amount) h+=’<tr><td>’+esc(r.expense)+’</td><td>’+fmt(r.amount)+’</td><td>’+esc(r.notes)+’</td></tr>’; });
-h += ‘</table></div>’;
+parts.push(”<div class='sec'><h2>◷ תזרים חודשי</h2><table><tr><th>הוצאה</th><th>סכום</th><th>הערות</th></tr>”);
+S.monthly.forEach(function(r){if(r.expense||r.amount)parts.push(”<tr><td>”+esc(r.expense)+”</td><td>”+fmt(r.amount)+”</td><td>”+esc(r.notes)+”</td></tr>”);});
+parts.push(”</table></div>”);
+parts.push(”<button class='pb' onclick='window.print()'>🖨️ הדפסה</button>”);
+parts.push(”</body></html>”);
 
-h += ‘<button class="pb" onclick="window.print()">🖨️ הדפסה</button>’;
-h += ‘</body></html>’;
+var html=parts.join(””);
+var blob=new Blob([html],{type:“text/html;charset=utf-8”});
+var url=URL.createObjectURL(blob);
+var a=document.createElement(“a”);a.href=url;a.download=“דוח_”+HMON[S.month]+”_”+S.year+”.html”;
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+setTimeout(function(){window.open(url,”_blank”);},300);
+toast(“דוח חודשי HTML ✓”);
+};
 
-// iOS-friendly: open in new tab so user can share/save
-var blob = new Blob([h], {type:‘text/html;charset=utf-8’});
-var url = URL.createObjectURL(blob);
-
-// Try download first, fallback to new tab (iOS Safari)
-var a = document.createElement(‘a’);
-a.href = url;
-a.download = ‘דוח_’+HEB_MONTHS[state.month]+’_’+state.year+’.html’;
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-
-// Also open in new tab for iOS where download may not work
-setTimeout(function(){ window.open(url,’_blank’); }, 300);
-
-toast(“דוח חודשי HTML יוצא ✓”);
+function toast(msg){
+var el=document.createElement(“div”);el.className=“toast”;el.textContent=msg;
+document.body.appendChild(el);setTimeout(function(){el.remove();},2100);
 }
 
-// ── Init ──
+// ── field builders ──
+function fld(label,type,val,tab,idx,key,ph,full){
+var c=full?“fd fu”:“fd”;
+return ‘<div class="'+c+'"><label>’+label+’</label><input type=”’+type+’” value=”’+esc(val)+’” placeholder=”’+esc(ph)+’” oninput=“upd('’+tab+”’,”+idx+”,’”+key+”’,this.value)" inputmode="”+(type===“number”?“decimal”:“text”)+”"></div>”;
+}
+function selCat(val,tab,idx,key){
+var cats=allCats();
+if(val&&cats.indexOf(val)===-1)cats=cats.concat([val]);
+var h=’<div class="fd"><label>קטגוריה</label><select onchange=“handleCatSelect(this,'’+tab+”’,”+idx+”,’”+key+”’)">”;
+h+=’<option value="">בחר…</option>’;
+cats.forEach(function(c){h+=’<option value=”’+esc(c)+’”’+(val===c?” selected”:””)+’>’+esc(c)+’</option>’;});
+h+=’<option value="__new__">+ קטגוריה חדשה…</option>’;
+h+=’</select></div>’;
+return h;
+}
+
+// ── tab renderers ──
+function rEquity(){
+var h=’<div class="cl">’;
+S.equity.forEach(function(r,i){
+h+=’<div class="cd"><button class="dx" onclick="delRow(\'equity\','+i+')">✕</button>’;
+h+=’<div class="cr">’+fld(“שם”,“text”,r.name,“equity”,i,“name”,“שם המקור”)+fld(“מספר”,“text”,r.number,“equity”,i,“number”,“מספר חשבון”)+”</div>”;
+h+=’<div class="cr">’+fld(“ערך”,“number”,r.value,“equity”,i,“value”,“0”)+fld(“הערות”,“text”,r.notes,“equity”,i,“notes”,“הערות”)+”</div></div>”;
+});
+h+=”</div>”;
+var t=S.equity.reduce(function(s,r){return s+(parseFloat(r.value)||0);},0);
+h+=’<div class="tot"><span class="l">סך הכל הון עצמי</span><span class="v">’+fmt(t)+”</span></div>”;
+h+=’<button class="ab" onclick="addRow(\'equity\')">+ הוסף מקור</button>’;
+return h;
+}
+
+function rSavings(){
+var h=’<div class="cl">’;
+S.savings.forEach(function(r,i){
+h+=’<div class="cd"><button class="dx" onclick="delRow(\'savings\','+i+')">✕</button>’;
+h+=’<div class="cr">’+fld(“שם”,“text”,r.name,“savings”,i,“name”,“שם החיסכון”)+fld(“מספר”,“text”,r.number,“savings”,i,“number”,“מספר”)+”</div>”;
+h+=’<div class="cr">’+fld(“ערך”,“number”,r.value,“savings”,i,“value”,“0”)+fld(“יעד”,“text”,r.target,“savings”,i,“target”,“יעד”)+”</div>”;
+h+=’<div class="cr">’+fld(“הערות”,“text”,r.notes,“savings”,i,“notes”,“הערות”,true)+”</div></div>”;
+});
+h+=”</div>”;
+var t=S.savings.reduce(function(s,r){return s+(parseFloat(r.value)||0);},0);
+h+=’<div class="tot"><span class="l">סך חסכונות יעודיים</span><span class="v">’+fmt(t)+”</span></div>”;
+h+=’<button class="ab" onclick="addRow(\'savings\')">+ הוסף חיסכון</button>’;
+return h;
+}
+
+function rPlanned(){
+var h=’<div class="cl">’;
+S.planned.forEach(function(r,i){
+h+=’<div class="cd"><button class="dx" onclick="delRow(\'planned\','+i+')">✕</button>’;
+h+=’<div class="cr">’+fld(“הוצאה”,“text”,r.expense,“planned”,i,“expense”,“שם ההוצאה”)+fld(“סכום”,“number”,r.amount,“planned”,i,“amount”,“0”)+”</div>”;
+h+=’<div class="cr">’+selCat(r.category,“planned”,i,“category”)+fld(“הערות”,“text”,r.notes,“planned”,i,“notes”,“הערות”)+”</div></div>”;
+});
+h+=”</div>”;
+var total=S.planned.reduce(function(s,r){return s+(parseFloat(r.amount)||0);},0);
+h+=’<div class="tot"><span class="l">סך הוצאות מתוכננות</span><span class="v">’+fmt(total)+”</span></div>”;
+h+=’<button class="ab" onclick="addRow(\'planned\')">+ הוסף הוצאה</button>’;
+var cats={};
+S.planned.forEach(function(r){if(r.category&&r.amount)cats[r.category]=(cats[r.category]||0)+(parseFloat(r.amount)||0);});
+var ck=Object.keys(cats);
+if(ck.length){
+ck.sort(function(a,b){return cats[b]-cats[a];});
+h+=’<div class="cs"><h3>סיכום לפי קטגוריות</h3><div class="cg">’;
+ck.forEach(function(c){
+var p=total>0?(cats[c]/total*100):0;
+h+=’<div class="cc"><div class="n">’+esc(c)+’</div><div class="a">’+fmt(cats[c])+’</div>’;
+h+=’<div class="bb"><div class="bf" style="width:'+p+'%"></div></div><div class="p">’+p.toFixed(1)+’%</div></div>’;
+});
+h+=”</div></div>”;
+}
+return h;
+}
+
+function rMonthly(){
+var h=’<div class="cl">’;
+S.monthly.forEach(function(r,i){
+h+=’<div class="cd"><button class="dx" onclick="delRow(\'monthly\','+i+')">✕</button>’;
+h+=’<div class="cr">’+fld(“הוצאה”,“text”,r.expense,“monthly”,i,“expense”,“שם ההוצאה”)+fld(“סכום”,“number”,r.amount,“monthly”,i,“amount”,“0”)+”</div>”;
+h+=’<div class="cr">’+fld(“הערות”,“text”,r.notes,“monthly”,i,“notes”,“הערות”,true)+”</div></div>”;
+});
+h+=”</div>”;
+var t=S.monthly.reduce(function(s,r){return s+(parseFloat(r.amount)||0);},0);
+h+=’<div class="tot"><span class="l">סך תזרים חודשי</span><span class="v">’+fmt(t)+”</span></div>”;
+h+=’<button class="ab" onclick="addRow(\'monthly\')">+ הוסף הוצאה</button>’;
+return h;
+}
+
+function rSummary(){
+var tE=S.equity.reduce(function(s,r){return s+(parseFloat(r.value)||0);},0);
+var tP=S.planned.reduce(function(s,r){return s+(parseFloat(r.amount)||0);},0);
+var net=tE-tP,clr=net>=0?“var(–grn)”:“var(–red)”;
+var h=’<div class="ss">’;
+h+=’<div class="sc"><div class="ic">◆</div><div class="l">סך הון עצמי</div><div class="a" style="color:var(--grn)">’+fmt(tE)+’</div></div>’;
+h+=’<div class="sd"><span class="so">−</span></div>’;
+h+=’<div class="sc"><div class="ic">▤</div><div class="l">סך הוצאות מתוכננות</div><div class="a" style="color:var(--red)">’+fmt(tP)+’</div></div>’;
+h+=’<div class="sd"><span class="so">=</span></div>’;
+h+=’<div class="sc res" style="border-color:'+clr+'"><div class="ic">Σ</div><div class="l">סך הכל</div><div class="a" style="font-size:28px;color:'+clr+'">’+fmt(net)+’</div><div class="su" style="color:'+clr+'">’+(net>=0?“יתרה חיובית”:“יתרה שלילית”)+”</div></div>”;
+h+=”</div>”;
+return h;
+}
+
+// ── main render ──
+function render(){
+var t=S.tab,ct=TABS.find(function(x){return x.id===t;}),h=””;
+
+h+=’<div class="hdr"><div class="hdr-top">’;
+h+=’<div class="logo">₪</div><div><h1>ניהול תזרים</h1><p>מעקב הון, חסכונות והוצאות</p></div>’;
+h+=’<div class="hdr-act"><button class="ib" onclick="exportExcel()" title="ייצוא">⬇</button>’;
+h+=’<label class="ib" title="ייבוא">⬆<input type="file" accept=".xlsx,.xls" onchange="importExcel(event)"></label></div></div>’;
+
+h+=’<div class="mbar"><span class="ci">📅</span><select onchange="setMonth(this.value)">’;
+for(var m=0;m<12;m++)h+=’<option value=”’+m+’”’+(S.month===m?” selected”:””)+”>”+HMON[m]+”</option>”;
+h+=’</select><input type="number" value="'+S.year+'" min="2020" max="2040" onchange="setYear(this.value)" inputmode="numeric"></div>’;
+
+h+=’<div class="rbar"><button class="rb" onclick="exportReportXl()">📊 דוח Excel</button>’;
+h+=’<button class="rb" onclick="exportReportHtml()">📄 דוח HTML</button></div></div>’;
+
+h+=’<div class="cnt"><div class="sh"><span class="ic">’+ct.ic+’</span><h2>’+ct.lb+”</h2></div>”;
+if(t===“equity”)h+=rEquity();
+else if(t===“savings”)h+=rSavings();
+else if(t===“planned”)h+=rPlanned();
+else if(t===“monthly”)h+=rMonthly();
+else if(t===“summary”)h+=rSummary();
+h+=”</div>”;
+
+h+=’<div class="tbar">’;
+TABS.forEach(function(tb){
+h+=’<button class=“tb’+(t===tb.id?” on”:””)+’” onclick=“switchTab('’+tb.id+”’)">”;
+h+=’<span class="ic">’+tb.ic+’</span><span class="lb">’+tb.lb+”</span></button>”;
+});
+h+=”</div>”;
+
+document.getElementById(“app”).innerHTML=h;
+}
+
 render();
+})();
 </script>
 
 </body>

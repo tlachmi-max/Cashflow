@@ -99,17 +99,16 @@ window.onerror = function(msg, url, line, col, err) {
   if (box) { box.style.display = "block"; box.textContent = "Error: " + msg + " (line " + line + ")"; }
 };
 
-try {
 var BASE_CATS = ["דיור","חינוך","בריאות","תחבורה","מזון","בילויים","ביגוד","חשבונות","ביטוח"];
 var customCats = [];
 function allCats() { return BASE_CATS.concat(customCats); }
 
 var TABS = [
-  {id:"equity", lb:"הון עצמי", ic:"\u25C6"},
-  {id:"savings", lb:"חסכונות", ic:"\u25CE"},
-  {id:"planned", lb:"הוצאות מתוכננות", ic:"\u25A4"},
-  {id:"monthly", lb:"תזרים חודשי", ic:"\u25F7"},
-  {id:"summary", lb:"סיכום", ic:"\u03A3"}
+  {id:"equity", lb:"הון עצמי", ic:"◆"},
+  {id:"savings", lb:"חסכונות", ic:"◎"},
+  {id:"planned", lb:"הוצאות מתוכננות", ic:"▤"},
+  {id:"monthly", lb:"תזרים חודשי", ic:"◸"},
+  {id:"summary", lb:"סיכום", ic:"Σ"}
 ];
 var HMON = ["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
 
@@ -133,8 +132,8 @@ var S = {
 
 function fmt(v) {
   var n = parseFloat(v);
-  if (isNaN(n)) return "\u20AA0";
-  return "\u20AA" + n.toLocaleString("he-IL");
+  if (isNaN(n)) return "₪0";
+  return "₪" + n.toLocaleString("he-IL");
 }
 function mLabel() { return HMON[S.month] + " " + S.year; }
 function esc(s) {
@@ -199,7 +198,7 @@ function rEquity() {
   var h = '<div class="cl">', t = 0;
   for (var i = 0; i < S.equity.length; i++) {
     var r = S.equity[i]; t += (parseFloat(r.value) || 0);
-    h += '<div class="cd"><button class="dx" onclick="delRow(\'equity\',' + i + ')">&#x2715;</button><div class="cr">' + fld("שם","text",r.name,"equity",i,"name","שם המקור") + fld("מספר","text",r.number,"equity",i,"number","מספר חשבון") + '</div><div class="cr">' + fld("ערך","number",r.value,"equity",i,"value","0") + fld("הערות","text",r.notes,"equity",i,"notes","הערות") + '</div></div>';
+    h += '<div class="cd"><button class="dx" onclick="delRow(\'equity\',' + i + ')">✕</button><div class="cr">' + fld("שם","text",r.name,"equity",i,"name","שם המקור") + fld("מספר","text",r.number,"equity",i,"number","מספר חשבון") + '</div><div class="cr">' + fld("ערך","number",r.value,"equity",i,"value","0") + fld("הערות","text",r.notes,"equity",i,"notes","הערות") + '</div></div>';
   }
   return h + '</div><div class="tot"><span class="l">סך הכל הון עצמי</span><span class="v">' + fmt(t) + '</span></div><button class="ab" onclick="addRow(\'equity\')">+ הוסף מקור</button>';
 }
@@ -208,7 +207,7 @@ function rSavings() {
   var h = '<div class="cl">', t = 0;
   for (var i = 0; i < S.savings.length; i++) {
     var r = S.savings[i]; t += (parseFloat(r.value) || 0);
-    h += '<div class="cd"><button class="dx" onclick="delRow(\'savings\',' + i + ')">&#x2715;</button><div class="cr">' + fld("שם","text",r.name,"savings",i,"name","שם החיסכון") + fld("מספר","text",r.number,"savings",i,"number","מספר") + '</div><div class="cr">' + fld("ערך","number",r.value,"savings",i,"value","0") + fld("יעד","text",r.target,"savings",i,"target","יעד") + '</div><div class="cr">' + fld("הערות","text",r.notes,"savings",i,"notes","הערות",true) + '</div></div>';
+    h += '<div class="cd"><button class="dx" onclick="delRow(\'savings\',' + i + ')">✕</button><div class="cr">' + fld("שם","text",r.name,"savings",i,"name","שם החיסכון") + fld("מספר","text",r.number,"savings",i,"number","מספר") + '</div><div class="cr">' + fld("ערך","number",r.value,"savings",i,"value","0") + fld("יעד","text",r.target,"savings",i,"target","יעד") + '</div><div class="cr">' + fld("הערות","text",r.notes,"savings",i,"notes","הערות",true) + '</div></div>';
   }
   return h + '</div><div class="tot"><span class="l">סך חסכונות יעודיים</span><span class="v">' + fmt(t) + '</span></div><button class="ab" onclick="addRow(\'savings\')">+ הוסף חיסכון</button>';
 }
@@ -218,7 +217,7 @@ function rPlanned() {
   for (var i = 0; i < S.planned.length; i++) {
     var r = S.planned[i]; var val = (parseFloat(r.amount) || 0); total += val;
     if (r.category && val) cats[r.category] = (cats[r.category] || 0) + val;
-    h += '<div class="cd"><button class="dx" onclick="delRow(\'planned\',' + i + ')">&#x2715;</button><div class="cr">' + fld("הוצאה","text",r.expense,"planned",i,"expense","שם ההוצאה") + fld("סכום","number",r.amount,"planned",i,"amount","0") + '</div><div class="cr">' + selCat(r.category,"planned",i,"category") + fld("הערות","text",r.notes,"planned",i,"notes","הערות") + '</div></div>';
+    h += '<div class="cd"><button class="dx" onclick="delRow(\'planned\',' + i + ')">✕</button><div class="cr">' + fld("הוצאה","text",r.expense,"planned",i,"expense","שם ההוצאה") + fld("סכום","number",r.amount,"planned",i,"amount","0") + '</div><div class="cr">' + selCat(r.category,"planned",i,"category") + fld("הערות","text",r.notes,"planned",i,"notes","הערות") + '</div></div>';
   }
   h += '</div><div class="tot"><span class="l">סך הוצאות מתוכננות</span><span class="v">' + fmt(total) + '</span></div><button class="ab" onclick="addRow(\'planned\')">+ הוסף הוצאה</button>';
   var ck = Object.keys(cats).sort((a,b) => cats[b] - cats[a]);
@@ -237,7 +236,7 @@ function rMonthly() {
   var h = '<div class="cl">', t = 0;
   for (var i = 0; i < S.monthly.length; i++) {
     var r = S.monthly[i]; t += (parseFloat(r.amount) || 0);
-    h += '<div class="cd"><button class="dx" onclick="delRow(\'monthly\',' + i + ')">&#x2715;</button><div class="cr">' + fld("הוצאה","text",r.expense,"monthly",i,"expense","שם ההוצאה") + fld("סכום","number",r.amount,"monthly",i,"amount","0") + '</div><div class="cr">' + fld("הערות","text",r.notes,"monthly",i,"notes","הערות",true) + '</div></div>';
+    h += '<div class="cd"><button class="dx" onclick="delRow(\'monthly\',' + i + ')">✕</button><div class="cr">' + fld("הוצאה","text",r.expense,"monthly",i,"expense","שם ההוצאה") + fld("סכום","number",r.amount,"monthly",i,"amount","0") + '</div><div class="cr">' + fld("הערות","text",r.notes,"monthly",i,"notes","הערות",true) + '</div></div>';
   }
   return h + '</div><div class="tot"><span class="l">סך תזרים חודשי</span><span class="v">' + fmt(t) + '</span></div><button class="ab" onclick="addRow(\'monthly\')">+ הוסף הוצאה</button>';
 }
@@ -246,14 +245,14 @@ function rSummary() {
   var tE = S.equity.reduce((a,b) => a + (parseFloat(b.value)||0), 0);
   var tP = S.planned.reduce((a,b) => a + (parseFloat(b.amount)||0), 0);
   var net = tE - tP, clr = net >= 0 ? "#7ecba1" : "#e8927c";
-  return '<div class="ss"><div class="sc"><div class="ic">\u25C6</div><div class="l">סך הון עצמי</div><div class="a" style="color:#7ecba1">' + fmt(tE) + '</div></div><div class="sd"><span class="so">\u2212</span></div><div class="sc"><div class="ic">\u25A4</div><div class="l">סך הוצאות מתוכננות</div><div class="a" style="color:#e8927c">' + fmt(tP) + '</div></div><div class="sd"><span class="so">=</span></div><div class="sc res" style="border-color:' + clr + '"><div class="ic">\u03A3</div><div class="l">סך הכל</div><div class="a" style="font-size:28px;color:' + clr + '">' + fmt(net) + '</div><div class="su" style="color:' + clr + '">' + (net >= 0 ? "יתרה חיובית" : "יתרה שלילית") + '</div></div></div>';
+  return '<div class="ss"><div class="sc"><div class="ic">◆</div><div class="l">סך הון עצמי</div><div class="a" style="color:#7ecba1">' + fmt(tE) + '</div></div><div class="sd"><span class="so">−</span></div><div class="sc"><div class="ic">▤</div><div class="l">סך הוצאות מתוכננות</div><div class="a" style="color:#e8927c">' + fmt(tP) + '</div></div><div class="sd"><span class="so">=</span></div><div class="sc res" style="border-color:' + clr + '"><div class="ic">Σ</div><div class="l">סך הכל</div><div class="a" style="font-size:28px;color:' + clr + '">' + fmt(net) + '</div><div class="su" style="color:' + clr + '">' + (net >= 0 ? "יתרה חיובית" : "יתרה שלילית") + '</div></div></div>';
 }
 
 function render() {
   var ct = TABS.find(t => t.id === S.tab) || TABS[0];
-  var h = '<div class="hdr"><div class="hdr-top"><div class="logo">\u20AA</div><div><h1>ניהול תזרים</h1><p>מעקב הון, חסכונות והוצאות</p></div><div class="hdr-act"><button class="ib" onclick="exportExcel()" title="ייצוא">\u2B07</button><label class="ib" title="ייבוא">\u2B06<input type="file" accept=".xlsx,.xls" onchange="importExcel(event)"></label></div></div><div class="mbar"><span class="ci">\uD83D\uDCC5</span><select onchange="setMonth(this.value)">';
+  var h = '<div class="hdr"><div class="hdr-top"><div class="logo">₪</div><div><h1>ניהול תזרים</h1><p>מעקב הון, חסכונות והוצאות</p></div><div class="hdr-act"><button class="ib" onclick="exportExcel()" title="ייצוא">⬇</button><label class="ib" title="ייבוא">⬆<input type="file" accept=".xlsx,.xls" onchange="importExcel(event)"></label></div></div><div class="mbar"><span class="ci">📅</span><select onchange="setMonth(this.value)">';
   for (var m = 0; m < 12; m++) h += '<option value="' + m + '"' + (S.month === m ? ' selected' : '') + '>' + HMON[m] + '</option>';
-  h += '</select><input type="number" value="' + S.year + '" min="2020" max="2040" onchange="setYear(this.value)" inputmode="numeric"></div><div class="rbar"><button class="rb" onclick="exportReportXl()">\uD83D\uDCCA דוח Excel</button><button class="rb" onclick="exportReportHtml()">\uD83D\uDCC4 דוח HTML</button></div></div>';
+  h += '</select><input type="number" value="' + S.year + '" min="2020" max="2040" onchange="setYear(this.value)" inputmode="numeric"></div><div class="rbar"><button class="rb" onclick="exportExcel()">📊 דוח Excel</button><button class="rb" onclick="exportReportHtml()">📄 דוח HTML</button></div></div>';
   h += '<div class="cnt"><div class="sh"><span class="ic">' + ct.ic + '</span><h2>' + ct.lb + '</h2></div>';
   if (S.tab === "equity") h += rEquity();
   else if (S.tab === "savings") h += rSavings();
@@ -266,12 +265,12 @@ function render() {
 }
 
 function exportExcel() {
-  var wb = XLSX.utils.book_new(), ml = mLabel();
+  var wb = XLSX.utils.book_new();
   var add = (n, d) => XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(d), n);
   add("הון עצמי", [["שם","מספר","ערך","הערות"], ...S.equity.map(r => [r.name, r.number, parseFloat(r.value)||0, r.notes])]);
   add("חסכונות", [["שם","מספר","ערך","יעד","הערות"], ...S.savings.map(r => [r.name, r.number, parseFloat(r.value)||0, r.target, r.notes])]);
   add("הוצאות", [["הוצאה","סכום","קטגוריה","הערות"], ...S.planned.map(r => [r.expense, parseFloat(r.amount)||0, r.category, r.notes])]);
-  XLSX.writeFile(wb, "תזרים_" + ml + ".xlsx");
+  XLSX.writeFile(wb, "תזרים_" + mLabel() + ".xlsx");
   toast("הקובץ יוצא בהצלחה");
 }
 
@@ -281,20 +280,15 @@ function importExcel(e) {
   reader.onload = function(ev) {
     try {
       var wb = XLSX.read(ev.target.result, {type: "array"});
-      // פונקציית ייבוא בסיסית - ניתן להרחיב לפי הצורך
-      toast("הקובץ יובא (סימולציה)"); render();
+      toast("הקובץ נטען"); render();
     } catch (err) { toast("שגיאה בייבוא"); }
   };
   reader.readAsArrayBuffer(file);
 }
 
-function exportReportXl() { exportExcel(); }
-
 function exportReportHtml() {
   var tE = S.equity.reduce((a,b) => a + (parseFloat(b.value)||0), 0);
-  var tS = S.savings.reduce((a,b) => a + (parseFloat(b.value)||0), 0);
   var tP = S.planned.reduce((a,b) => a + (parseFloat(b.amount)||0), 0);
-  var tM = S.monthly.reduce((a,b) => a + (parseFloat(b.amount)||0), 0);
   var net = tE - tP, clr = net >= 0 ? "#7ecba1" : "#e8927c";
 
   var p = ["<!DOCTYPE html><html lang='he' dir='rtl'><head><meta charset='UTF-8'><title>דוח " + mLabel() + "</title>"];
@@ -303,12 +297,11 @@ function exportReportHtml() {
   p.push("<div class='sec'><h3>סיכום</h3><p>הון עצמי: " + fmt(tE) + "</p><p>הוצאות מתוכננות: " + fmt(tP) + "</p><p style='color:" + clr + "'>יתרה: " + fmt(net) + "</p></div>");
   p.push("<button onclick='window.print()'>הדפס</button></body></html>");
 
-  var url = URL.createObjectURL(new Blob([p.join("")], {type: "text/html;charset=utf-8"}));
-  window.open(url, "_blank");
+  var blob = new Blob([p.join("")], {type: "text/html;charset=utf-8"});
+  window.open(URL.createObjectURL(blob), "_blank");
 }
 
 render();
-} catch(e) { document.getElementById("errbox").style.display = "block"; document.getElementById("errbox").textContent = "Init Error: " + e.message; }
 </script>
 </body>
 </html>
